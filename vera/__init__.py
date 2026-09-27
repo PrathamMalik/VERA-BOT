@@ -1,0 +1,1 @@
+"""Vera bot package."""
