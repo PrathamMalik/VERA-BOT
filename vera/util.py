@@ -102,8 +102,11 @@ def humanize(slug: str) -> str:
 HINDI_BELT_BLOCKERS = {"ta", "kn", "ml"}  # south-Indian merchants: English reads more natural than Hinglish
 
 
-def merchant_lang(merchant: dict) -> str:
-    """Return 'hinglish' or 'en' for merchant-facing copy."""
+def merchant_lang(merchant: dict, category: dict | None = None) -> str:
+    """Return 'hinglish' or 'en' for merchant-facing copy.
+    The category's own voice rule wins: code_mix 'english_primary…' (gyms) -> English."""
+    if str(((category or {}).get("voice") or {}).get("code_mix", "")).startswith("english_primary"):
+        return "en"
     langs = [str(l).lower() for l in (merchant.get("identity", {}).get("languages") or [])]
     if "hi" in langs and not (HINDI_BELT_BLOCKERS & set(langs)):
         return "hinglish"

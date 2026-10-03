@@ -332,7 +332,7 @@ def respond(store: Store, body: dict) -> dict:
     flags = store.merchant_flags[merchant_id]
 
     # ---- sticky language (switch on explicit ask, or 3 messages in a row in another language)
-    profile_lang = c.clang if from_role == "customer" else merchant_lang(merchant)
+    profile_lang = c.clang if from_role == "customer" else merchant_lang(merchant, category)
     lang = conv.setdefault("lang", profile_lang)
     ml = "hinglish" if detect_msg_lang(msg) in ("hinglish", "hindi") else "en"
     asked = next((k for k, pats in LANG_ASK.items() if _any(pats, msg)), None)
@@ -411,6 +411,19 @@ def respond(store: Store, body: dict) -> dict:
         return send(L(lang, f"No problem, {sal} — thanks for letting me know. I'll only reach out if something important comes up for {c.mname}.",
                       f"Koi baat nahi {sal} — batane ke liye shukriya. Sirf tab message karungi jab {c.mname} ke liye kuch zaroori ho."),
                     "Declined: polite close, conversation ended, this topic paused for the merchant.", "none", end_after=True)
+
+    fu = conv.get("followup") or {}
+    if fu.get("type") == "send_customer_reminder" and fu.get("draft") and label in ("engaged", "question") \
+            and len(msg.split()) >= 2 and "?" not in msg and bot_turns < 5:
+        line = re.sub(r"^(tagline|line|use|add)\s*[:\-]\s*", "", msg.strip(), flags=re.I).strip(" \"'“”")
+        flags["tagline"] = line
+        draft = fu["draft"].replace(fu.get("brand") or "\x00", f"✨ {line}") if fu.get("brand") and fu["brand"] in fu["draft"] \
+            else fu["draft"].rsplit("\n", 1)[0] + f"\n✨ {line}\n" + fu["draft"].rsplit("\n", 1)[-1]
+        fu["draft"], fu["brand"] = draft, f"✨ {line}"
+        quoted = "\n".join("> " + ln for ln in draft.split("\n"))
+        return send(L(lang, f"Love it ✅ I'll use your line in {c.mname}'s customer messages from now on. Updated draft:\n{quoted}\n\nSend it? Reply YES.",
+                      f"Badhiya ✅ Ab se {c.mname} ke customer messages mein aapki line use karungi. Updated draft:\n{quoted}\n\nBhej doon? Reply YES."),
+                    "Merchant supplied their own brand line: saved for future drafts, updated draft shown for one-tap approval.", "binary_yes_stop")
 
     if bot_turns >= 5:
         return end("Turn budget reached (5 bot messages).")

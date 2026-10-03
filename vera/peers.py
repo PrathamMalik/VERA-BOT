@@ -102,7 +102,7 @@ def weak_spots(m: dict, pg: PeerGroup, lang: str = "en") -> list[dict]:
         if t.get("sentiment") == "neg" and t.get("occurrences_30d"):
             q = f" (\"{t['common_quote']}\")" if t.get("common_quote") else ""
             out.append({"id": f"theme_{t['theme']}", "type": f"theme_{t['theme']}", "sev": 0.35 + 0.05 * int(t["occurrences_30d"]),
-                        "text": f"{humanize(t['theme']).capitalize()}: {t['occurrences_30d']} reviews{q}"})
+                        "text": f"{humanize(t['theme']).capitalize()}: {t['occurrences_30d']} Google reviews this month{q}"})
     agg = m.get("customer_aggregate") or {}
     for key, label in RATE_KEYS:
         if agg.get(key) is not None and pg.bench.get(key) is not None and agg[key] < pg.bench[key] - 0.05:
@@ -119,7 +119,7 @@ def weak_spots(m: dict, pg: PeerGroup, lang: str = "en") -> list[dict]:
     if m.get("identity", {}).get("verified") is False:
         out.append({"id": "unverified", "type": "unverified", "sev": 0.45, "text": "Google profile not verified"})
     if not [o for o in m.get("offers") or [] if o.get("status") == "active"]:
-        out.append({"id": "no_offer", "type": "no_offer", "sev": 0.3, "text": "No active offer on Google"})
+        out.append({"id": "no_offer", "type": "no_offer", "sev": 0.3, "text": "No live offer on your Google profile"})
     out.sort(key=lambda x: -x["sev"])
     return out
 
@@ -137,7 +137,7 @@ def positives(m: dict, pg: PeerGroup) -> list[dict]:
         if t.get("sentiment") == "pos" and t.get("occurrences_30d"):
             q = f" (\"{t['common_quote']}\")" if t.get("common_quote") else ""
             out.append({"id": f"theme_{t['theme']}", "sev": 0.5 + 0.05 * int(t["occurrences_30d"]),
-                        "text": f"{t['occurrences_30d']} reviews this month praise your {humanize(t['theme'])}{q}"})
+                        "text": f"{t['occurrences_30d']} Google reviews this month praise your {humanize(t['theme'])}{q}"})
     for k, v in (perf.get("delta_7d") or {}).items():
         try:
             v = float(v)
@@ -149,6 +149,12 @@ def positives(m: dict, pg: PeerGroup) -> list[dict]:
     for key, label in RATE_KEYS:
         if agg.get(key) is not None and pg.bench.get(key) is not None and agg[key] > pg.bench[key] + 0.05:
             out.append({"id": f"high_{key}", "sev": 0.4, "text": f"{label}: {pct(agg[key])} vs {pct(pg.bench[key])}"})
+    if agg.get("monthly_churn_pct") is not None and pg.bench.get("monthly_churn_pct") is not None \
+            and agg["monthly_churn_pct"] < pg.bench["monthly_churn_pct"]:
+        out.append({"id": "low_churn", "sev": 0.45, "text": f"Monthly churn: {pct(agg['monthly_churn_pct'])} vs {pct(pg.bench['monthly_churn_pct'])} benchmark"})
+    if agg.get("trial_to_paid_pct") is not None and pg.bench.get("trial_to_paid_pct") is not None \
+            and agg["trial_to_paid_pct"] > pg.bench["trial_to_paid_pct"]:
+        out.append({"id": "high_trial_conv", "sev": 0.45, "text": f"Trial-to-paid: {pct(agg['trial_to_paid_pct'])} vs {pct(pg.bench['trial_to_paid_pct'])} benchmark"})
     if m.get("identity", {}).get("verified"):
         out.append({"id": "verified", "sev": 0.05, "text": "Verified Google profile"})
     out.sort(key=lambda x: -x["sev"])

@@ -60,7 +60,7 @@ class Ctx:
         self.city = self.ident.get("city", "")
         self.sal = salutation(self.merchant, self.slug)
         self.first = owner_first(self.merchant)
-        self.lang = merchant_lang(self.merchant)
+        self.lang = merchant_lang(self.merchant, self.category)
         self.clang = customer_lang(customer, self.merchant)
         self.perf = self.merchant.get("performance", {}) or {}
         self.delta = self.perf.get("delta_7d", {}) or {}
@@ -238,34 +238,57 @@ def _moves(delta, sign):
     return out
 
 
-# =============================================================== the #6 "weak spots" pattern (shared by #6 #7 #8 #10 #15)
+# =============================================================== strengths-first pattern (shared by #6 #7 #8 #10 #15)
+SRC_PEERS = ("magicpin data, last 30 days", "magicpin data, pichhle 30 din")
+
+
+def own_numbers(c: Ctx) -> str:
+    """'Your last 30 days: 5,934 profile views, 65 calls (magicpin dashboard)' — the merchant's own reflection."""
+    v, k = c.perf.get("views"), c.perf.get("calls")
+    if not v and not k:
+        return ""
+    parts = ([f"{num(v)} profile views"] if v else []) + ([f"{num(k)} calls"] if k else [])
+    line = L(c.lang, f"Your last 30 days: {', '.join(parts)} (magicpin dashboard)", f"Aapke pichhle 30 din: {', '.join(parts)} (magicpin dashboard)")
+    if c.slug == "gyms":  # the number a gym owner thinks in: members
+        mem, ytd = c.agg.get("total_active_members"), c.agg.get("total_unique_ytd")
+        who = f"{num(mem)} active members" if mem else f"{num(ytd)} members this year" if ytd else ""
+        if who:
+            line = f"{who} (your magicpin customer data) · " + line[0].lower() + line[1:]
+    return line
+
+
+SINGULAR = {"dentists": "dental clinic", "salons": "salon", "restaurants": "restaurant", "gyms": "gym", "pharmacies": "pharmacy"}
+
+
 def weak_spot_draft(c: Ctx, head: str, rationale: str, extra_after: str = "", exclude_types=(), min_spots=0) -> Draft:
+    """Strengths first (decision, eval round 1): where they already beat similar merchants, then 1-2 places to win more.
+    Every comparison carries its source. One story, one CTA."""
     ws = [w for w in weak_spots(c.merchant, c.pg, c.lang) if w["type"] not in exclude_types]
-    pos = positives(c.merchant, c.pg)
+    pos = [p for p in positives(c.merchant, c.pg) if p["id"] != "verified"]
     cands = [{"id": w["id"], "text": w["text"]} for w in ws[:8]]
     follow = {"type": "positives_strategies", "weak_types": [], "weak_texts": [], "positives": [p["text"] for p in pos[:3]],
               "noun": noun(c.slug)}
+    src = L(c.lang, *SRC_PEERS)
 
     def render(ai):
         ids = [w["id"] for w in ws]
-        picks = [i for i in (ai or {}).get("picks", []) if i in ids][:3] if ai else []
-        if not picks:
-            picks = ids[:3] if len(ids) >= 3 and ws[2]["sev"] >= 0.3 else ids[:2]
-        chosen = [w for w in ws if w["id"] in picks]
+        picks = [i for i in (ai or {}).get("picks", []) if i in ids][:2] if ai else []
+        chosen = [w for w in ws if w["id"] in picks] or ws[:2]
         follow["weak_types"] = [w["type"] for w in chosen]
         follow["weak_texts"] = [w["text"] for w in chosen]
         parts = [head]
+        if pos:
+            parts.append(L(c.lang, f"Where you're already ahead of {c.pg.label} ({src}):", f"Jahan aap {c.pg.label} se aage ho ({src}):"))
+            parts.append(bullets(p["text"] for p in pos[:2]))
         if chosen:
-            parts.append(L(c.lang, f"Your weakest spots (you vs avg for {c.pg.label}):", f"Aapke weak spots (aap vs {c.pg.label} ka avg):"))
+            parts.append(L(c.lang, "Where you can win more:", "Jahan aur jeet sakte ho:") if pos else
+                         L(c.lang, f"Where you can win more (you vs {c.pg.label}, {src}):", f"Jahan aur jeet sakte ho (aap vs {c.pg.label}, {src}):"))
             parts.append(bullets(w["text"] for w in chosen))
-        else:
-            parts.append(L(c.lang, f"You're ahead of {c.pg.label} on every number we track.",
-                           f"Aap har tracked number pe {c.pg.label} se aage ho."))
         if extra_after:
             parts.append(extra_after)
         if chosen:
-            parts.append(yes(c.lang, "show what's working for you + the common fixes",
-                             "Kya kaam kar raha hai + common fixes dikha doon?"))
+            parts.append(yes(c.lang, f"share the 3 ways {noun(c.slug)} most often close these gaps",
+                             f"{noun(c.slug).capitalize()} yeh gaps kaise close karte hain — top 3 tareeke bhej doon?"))
         else:
             parts.append(yes(c.lang, "show how to keep that lead", "Yeh lead kaise bani rahe, dikha doon?"))
         return "\n".join(p for p in parts if p)
@@ -273,11 +296,12 @@ def weak_spot_draft(c: Ctx, head: str, rationale: str, extra_after: str = "", ex
     f = c.base_facts()
     f["weak_spot_candidates"] = [w["text"] for w in ws[:8]]
     f["peer_label"] = c.pg.label
-    task = AITask("picks_line", "Pick the 1-3 weak spots that matter most for this merchant right now, given the trigger. Return picks only; line may be empty.",
-                  candidates=cands, max_picks=3, priority=2) if len(cands) > 2 else None
-    d = Draft(render(None), facts=f, offer="positives + strategies", rationale=rationale, ai=task, render=render, followup=follow,
-              template_params=[c.sal, c.mname])
-    return d
+    if not ws and not pos:
+        return Draft("", skip=True, rationale=rationale + " — but no strengths or gaps in the data, so nothing honest to add.")
+    task = AITask("picks_line", "Pick the 1-2 gaps that matter most for this merchant right now, given the trigger. Return picks only; line may be empty.",
+                  candidates=cands, max_picks=2, priority=2) if len(cands) > 2 else None
+    return Draft(render(None), facts=f, offer="positives + strategies", rationale=rationale, ai=task, render=render, followup=follow,
+                 template_params=[c.sal, c.mname])
 
 
 # =============================================================== merchant-facing handlers
@@ -285,10 +309,18 @@ def h_research_digest(c: Ctx) -> Draft:
     items = [d for d in c.category.get("digest") or [] if d.get("kind") in ("research", "trend", "tech")]
     item = c.digest(c.payload.get("top_item_id"))
     empty = item is None
+    fresh_ok = set()
     if empty:
         words = (" ".join(c.offers) + " " + c.history_text() + " " + " ".join(t.get("theme", "") for t in c.merchant.get("review_themes") or [])).lower()
-        scored = sorted(items, key=lambda d: -sum(1 for w in re.findall(r"[a-z]{5,}", (d.get("title", "") + d.get("summary", "")).lower()) if w in words))
+        rel = {d["id"]: sum(1 for w in re.findall(r"[a-z]{5,}", (d.get("title", "") + d.get("summary", "")).lower()) if w in words) for d in items}
+        scored = sorted(items, key=lambda d: -rel[d["id"]])
         item = scored[0] if scored else None
+        # newest-relevant with a floor: a newly pushed item wins only if it is clearly relevant (>=1 match and at least
+        # half as relevant as the best item). Otherwise keep the current (most relevant) pick.
+        best = rel[item["id"]] if item else 0
+        fresh_ok = {d["id"] for d in items if d.get("_new") and rel[d["id"]] >= 1 and rel[d["id"]] * 2 >= best}
+        if fresh_ok:
+            item = max((d for d in items if d["id"] in fresh_ok), key=lambda d: rel[d["id"]])
     if not item:
         return h_generic(c)
     aud = {"dentists": "patient", "gyms": "member", "salons": "client"}.get(c.slug, "customer")
@@ -315,7 +347,9 @@ def h_research_digest(c: Ctx) -> Draft:
     def render(ai):
         it = item
         if empty and ai and ai.get("picks") and ai["picks"][0] in by_id:
-            it = by_id[ai["picks"][0]]
+            pick = ai["picks"][0]
+            if not fresh_ok or pick in fresh_ok:   # floor: with a qualifying new item, the AI may only choose among those
+                it = by_id[pick]
         return build(it, (ai or {}).get("line", "").strip())
 
     f = c.base_facts(); f["digest_items"] = items if empty else [item]
@@ -323,7 +357,8 @@ def h_research_digest(c: Ctx) -> Draft:
                   ("Pick the ONE digest item most relevant to this merchant, and write one sentence on why it matters to THEM "
                    if empty else "Write one sentence on why this item matters to THIS merchant ")
                   + "(their patients/customers, offers, past requests). Never overstate the study (no 'proves', 'cures', 'guaranteed').",
-                  candidates=[{"id": d["id"], "text": d["title"]} for d in items] if empty else [], max_picks=1, priority=2)
+                  candidates=[{"id": d["id"], "text": d["title"]} for d in items if not fresh_ok or d["id"] in fresh_ok] if empty else [],
+                  max_picks=1, priority=2)
     return Draft(render(None), facts=f, offer=f"send the abstract + a {aud}-education WhatsApp", ai=task, render=render,
                  rationale=f"Research digest ({item.get('source')}): exact study facts from code; AI only explains relevance.",
                  followup={"type": "abstract", "item_id": item["id"]}, template_params=[c.sal, item.get("title"), item.get("source")])
@@ -447,14 +482,38 @@ def h_competitor_opened(c: Ctx) -> Draft:
         if p.get("their_offer"):
             own = next((o for o in c.offers if _price(o) and _price(p["their_offer"]) and o.split("@")[0].strip().lower() == p["their_offer"].split("@")[0].strip().lower()), None)
             facts.append(f"Their offer: {p['their_offer']}" + (f" (yours: {inr(_price(own))})" if own else ""))
-        head = f"{c.sal}, heads-up:\n" + bullets(facts) + "\n" + \
-            L(c.lang, "New places win customers where you're weakest.", "Naye places wahan jeetate hain jahan aap weak ho.")
+        head = f"{c.sal}, heads-up — a new competitor nearby:\n" + bullets(facts) + "\n" + \
+            L(c.lang, "Here's how you stack up:", "Aap kahan khade ho:")
     else:
-        head = L(c.lang, f"{c.sal}, a new {c.slug.rstrip('s')} has opened near {c.locality}. New places win customers where you're weakest.",
-                 f"{c.sal}, {c.locality} ke paas naya {c.slug.rstrip('s')} khula hai. Naye places wahan jeetate hain jahan aap weak ho.")
+        return _competitor_compare(c)
     d = weak_spot_draft(c, head, "Competitor opened: exact competitor facts (never invented) + code-computed weak spots vs peers; closing offer = positives + strategies.")
     d.facts["competitor"] = p
     return d
+
+
+def _competitor_compare(c: Ctx) -> Draft:
+    """Competitor opened, no details: stay on the competitor topic — what nearby customers comparing the two will see."""
+    one = SINGULAR.get(c.slug, "business")
+    pos = c.pos_theme()
+    see = []
+    if pos:
+        see.append(f"Your Google reviews: {pos['occurrences_30d']} this month praise your {humanize(pos['theme'])}" +
+                   (f" (\"{pos['common_quote']}\")" if pos.get("common_quote") else ""))
+    v, avg = c.perf.get("views"), c.pg.avg("views")
+    if v and avg:
+        see.append(f"Your visibility: {num(v)} profile views vs {num(avg)} avg for {c.pg.label} ({SRC_PEERS[0]})")
+    see.append(f"Your live offer: {c.offers[0]}" if c.offers else "Your live offer: none on Google yet")
+    gap_fix = (L(c.lang, f"Before they compare, add one offer — e.g. \"{c.catalog_offer()}\".", f"Compare karne se pehle ek offer daal dijiye — jaise \"{c.catalog_offer()}\".")
+               if not c.offers and c.catalog_offer() else "")
+    head = L(c.lang, f"{c.sal}, a new {one} has opened near {c.locality}. Customers nearby will compare the two — here's what they'll see for {c.mname}:",
+             f"{c.sal}, {c.locality} ke paas naya {one} khula hai. Aas-paas ke customers dono ko compare karenge — {c.mname} ke baare mein unhe yeh dikhega:")
+    cta = (yes(c.lang, "put that offer live", "Woh offer live kar doon?") if gap_fix else
+           yes(c.lang, f"share 3 ways {noun(c.slug)} keep regulars when a new place opens", f"Naya place khulne pe {noun(c.slug)} regulars kaise rokte hain — 3 tareeke bhej doon?"))
+    body = "\n".join(x for x in [head, bullets(see), gap_fix, cta] if x)
+    return Draft(body, facts=c.base_facts(), offer="competitive edge", followup={"type": "offer_live", "offer": c.catalog_offer()} if gap_fix else
+                 {"type": "positives_strategies", "weak_types": [], "weak_texts": [], "positives": see[:2], "noun": noun(c.slug)},
+                 rationale="Competitor opened (no details): stays on the competitor topic — what customers comparing will see, sourced; one action.",
+                 template_params=[c.sal])
 
 
 def h_review_theme(c: Ctx) -> Draft:
@@ -476,8 +535,30 @@ def h_review_theme(c: Ctx) -> Draft:
                      followup={"type": "positives_strategies", "weak_types": [f"theme_{th['theme']}"], "weak_texts": [facts[0]],
                                "positives": [x["text"] for x in positives(c.merchant, pg)[:3]], "noun": noun(c.slug)},
                      template_params=[c.sal, humanize(th["theme"])])
-    head = L(c.lang, f"{c.sal}, a quick look at {c.mname}.", f"{c.sal}, {c.mname} pe ek quick look.")
-    return weak_spot_draft(c, head, "Review-theme trigger without review data: no vague claims — weak spots vs peers instead.")
+    themes = sorted([t for t in c.merchant.get("review_themes") or [] if t.get("occurrences_30d")], key=lambda t: -int(t["occurrences_30d"]))
+    neg = next((t for t in themes if t.get("sentiment") == "neg"), None)
+    pos = next((t for t in themes if t.get("sentiment") == "pos"), None)
+    if not neg and not pos:
+        return Draft("", skip=True, rationale="Review-theme trigger, but no review themes in the data — nothing honest to say about reviews (restraint).")
+    q = lambda t: f" (\"{t['common_quote']}\")" if t.get("common_quote") else ""
+    if neg:
+        facts = [f"{humanize(neg['theme']).capitalize()}: {neg['occurrences_30d']} Google reviews this month{q(neg)}"]
+        if pos:
+            facts.append(f"Still strong: {pos['occurrences_30d']} praise your {humanize(pos['theme'])}{q(pos)}")
+        body = "\n".join([L(c.lang, f"{c.sal}, a pattern just showed up in your recent Google reviews:", f"{c.sal}, aapke recent Google reviews mein ek pattern dikha:"),
+                          bullets(facts),
+                          yes(c.lang, f"share the 3 fixes {noun(c.slug)} most often use for this", f"{noun(c.slug).capitalize()} ise kaise fix karte hain — top 3 tareeke bhej doon?")])
+        follow = {"type": "positives_strategies", "weak_types": [f"theme_{neg['theme']}"], "weak_texts": facts[:1],
+                  "positives": [x["text"] for x in positives(c.merchant, c.pg)[:3]], "noun": noun(c.slug)}
+    else:
+        facts = [f"{pos['occurrences_30d']} Google reviews this month praise your {humanize(pos['theme'])}{q(pos)}"]
+        body = "\n".join([L(c.lang, f"{c.sal}, your recent Google reviews have a clear favourite:", f"{c.sal}, aapke recent Google reviews ka ek clear favourite hai:"),
+                          bullets(facts),
+                          yes(c.lang, "turn this into a Google post that brings in new customers", "Isse ek Google post bana doon jo naye customers laaye?")])
+        follow = {"type": "plan_post"}
+    return Draft(body, facts=c.base_facts(), offer="review-theme fixes", followup=follow,
+                 rationale="Review-theme trigger without details: the merchant's own review themes (count + quote), strengths kept visible.",
+                 template_params=[c.sal])
 
 
 def h_perf_dip(c: Ctx) -> Draft:
@@ -487,21 +568,10 @@ def h_perf_dip(c: Ctx) -> Draft:
     else:
         mv = _moves(c.delta, -1)
         if not mv:
-            # honest status instead of a fake 'dip': nothing is down, but show the real gap vs peers (if any)
-            ups = ", ".join(f"{k} {pct(v, signed=True)}" for k, v in _moves(c.delta, +1)[:2])
-            head = L(c.lang, f"{c.sal}, quick look at your numbers: {ups + ' this week — ' if ups else ''}nothing is dipping right now.",
-                     f"{c.sal}, aapke numbers pe ek nazar: {ups + ' is hafte — ' if ups else ''}abhi kuch gir nahi raha.")
-            if not weak_spots(c.merchant, c.pg, c.lang):
-                return Draft("", skip=True, rationale="Empty perf_dip trigger, numbers not down and no gap vs peers — nothing honest to add.")
-            fix = ""
-            if not c.offers and c.catalog_offer():
-                fix = L(c.lang, f"Quickest fix: no active offer on Google — e.g. \"{c.catalog_offer()}\".",
-                        f"Sabse jaldi fix: Google pe koi active offer nahi — jaise \"{c.catalog_offer()}\".")
-            return weak_spot_draft(c, head, "Dip trigger but the data shows no dip: honest status + the real gaps vs peers + one quick fix.",
-                                   extra_after=fix, exclude_types=("no_offer",) if fix else ())
+            return _no_dip_check(c)
         (metric, d), base = mv[0], None
-    head = L(c.lang, f"{c.sal}, your {_metric_label(metric)} dropped {pct(d)} this week" + (f" (usually ~{base})" if base else "") + ".",
-             f"{c.sal}, is hafte aapke {_metric_label(metric)} {pct(d)} gire" + (f" (usually ~{base})" if base else "") + ".")
+    head = L(c.lang, f"{c.sal}, your {_metric_label(metric)} dropped {pct(d)} this week" + (f" (usually ~{base})" if base else "") + " (magicpin dashboard).",
+             f"{c.sal}, is hafte aapke {_metric_label(metric)} {pct(d)} gire" + (f" (usually ~{base})" if base else "") + " (magicpin dashboard).")
     fix = ""
     if not c.offers:
         sug = c.catalog_offer()
@@ -515,6 +585,39 @@ def h_perf_dip(c: Ctx) -> Draft:
     return dr
 
 
+def _no_dip_check(c: Ctx) -> Draft:
+    """Dip trigger, but nothing is down this week. Framed as a dip CHECK with a clear all-clear (no contradiction),
+    then ONE forward-looking item. Decision: send this (not skip) — it scored 40 on unseen data."""
+    ups = _moves(c.delta, +1)[:2]
+    ws = [w for w in weak_spots(c.merchant, c.pg, c.lang) if not w["type"].startswith("drop_")]
+    one = next((w for w in ws if w["type"] != "no_offer"), None)
+    if not one and c.offers:
+        return Draft("", skip=True, rationale="Dip trigger, nothing down, no gap to work on — nothing useful to add (restraint).")
+    # Positive framing (decision after eval round 3: "nothing is down" + weekly % read as contradiction/fabrication).
+    # Lead with the merchant's own 30-day totals (the numbers they see on their dashboard) and "holding steady".
+    v, k = c.perf.get("views"), c.perf.get("calls")
+    tot = ", ".join(x for x in [f"{num(v)} profile views" if v else "", f"{num(k)} calls" if k else ""] if x)
+    head = L(c.lang, f"{c.sal}, quick health check on {c.mname}: your numbers are holding steady ✅" +
+             (f" — {tot} in the last 30 days (magicpin dashboard)." if tot else "."),
+             f"{c.sal}, {c.mname} ka quick health check: aapke numbers steady hain ✅" +
+             (f" — pichhle 30 din mein {tot} (magicpin dashboard)." if tot else "."))
+    head += L(c.lang, " A good moment to grow from here:", " Yahan se aur badhne ka achha mauka hai:")
+    if not c.offers and c.catalog_offer():
+        nxt = L(c.lang, f"• Put one live offer on your Google profile, e.g. \"{c.catalog_offer()}\"",
+                f"• Google profile pe ek live offer daaliye, jaise \"{c.catalog_offer()}\"")
+        cta = yes(c.lang, "put it live for you", "Main live kar doon?")
+        follow = {"type": "offer_live", "offer": c.catalog_offer()}
+    elif one:
+        nxt = L(c.lang, f"• One place to win more ({SRC_PEERS[0]}): {one['text']}", f"• Jahan aur jeet sakte ho ({SRC_PEERS[1]}): {one['text']}")
+        cta = yes(c.lang, "share the quickest fix for that", "Iska sabse jaldi fix bhej doon?")
+        follow = {"type": "positives_strategies", "weak_types": [one["type"]], "weak_texts": [one["text"]], "positives": [], "noun": noun(c.slug)}
+    else:
+        nxt, cta, follow = "", yes(c.lang, "keep watching and flag the first real dip", "Main nazar rakhun aur pehla asli dip aate hi bataun?"), {"type": "reminder_set"}
+    return Draft("\n".join(x for x in [head, nxt, cta] if x), facts=c.base_facts(), offer="stay-ahead step", followup=follow,
+                 rationale="Dip trigger, but nothing is down: positive health check with the merchant's own 30-day totals + one growth step.",
+                 template_params=[c.sal])
+
+
 def h_perf_spike(c: Ctx) -> Draft:
     p = c.payload
     if not c.placeholder and p.get("metric"):
@@ -526,23 +629,22 @@ def h_perf_spike(c: Ctx) -> Draft:
         (metric, d), base, driver = mv[0], None, None
     f = c.base_facts()
     if d >= 0.10:
-        lead = L(c.lang, f"{c.sal}, {_metric_label(metric)} up {pct(d)} this week" + (f" (usually ~{base})" if base else "") +
-                 (f", likely from your {humanize(driver)}" if driver else "") + ". Extra calls only matter if they convert:",
-                 f"{c.sal}, is hafte {_metric_label(metric)} {pct(d)} upar" + (f" (usually ~{base})" if base else "") +
-                 (f", shayad aapke {humanize(driver)} ki wajah se" if driver else "") + ". Extra calls tabhi kaam ke hain jab convert hon:")
+        lead = L(c.lang, f"{c.sal}, great week — {_metric_label(metric)} up {pct(d)}" + (f" (baseline ~{base})" if base else "") + " 🎉 (magicpin dashboard)" +
+                 (f", likely from your {humanize(driver)}" if driver else "") + ". One way to keep the momentum:",
+                 f"{c.sal}, badhiya hafta — {_metric_label(metric)} {pct(d)} upar" + (f" (aam taur pe ~{base})" if base else "") + " 🎉 (magicpin dashboard)" +
+                 (f", shayad aapke {humanize(driver)} ki wajah se" if driver else "") + ". Momentum banaye rakhne ka ek tareeka:")
         if c.offers:
-            tips = ["Mention your offers when people call: " + ", ".join(f"\"{o}\"" for o in c.offers[:2]),
-                    "Reply to every new enquiry the same day"]
+            tips = [f"Mention \"{c.offers[0]}\" to every new enquiry — reply the same day"]
             cta = yes(c.lang, "draft a 2-line reply you can send to every new enquiry", "Har nayi enquiry ke liye 2-line reply draft kar doon?")
             follow = {"type": "enquiry_reply"}
         else:
             sug = c.catalog_offer(kinds=("free_service", "service_at_price"))
-            tips = [f"You have no active offer to mention — {noun(c.slug)} often use one like \"{sug}\""]
+            tips = [f"Give the new visitors a reason to book now — a live offer like \"{sug}\""]
             cta = yes(c.lang, "put it live on your profile", "Ise profile pe live kar doon?")
             follow = {"type": "offer_live", "offer": sug}
         body = "\n".join([lead, bullets(tips), cta])
         return Draft(body, facts=f, offer="enquiry reply draft", followup=follow,
-                     rationale="Real spike (≥10%): convert the extra enquiries using the merchant's real offers.", template_params=[c.sal, pct(d)])
+                     rationale="Big spike (≥10%): celebrate + one way to keep the momentum (one story, no undercutting the good news).", template_params=[c.sal, pct(d)])
     # small spike: compare with same-category merchants in our own data
     pg = c.pg
     mkt = pg.avg_delta(metric)
@@ -558,18 +660,18 @@ def h_perf_spike(c: Ctx) -> Draft:
         cands.append({"id": "verified", "text": f"Verified profile: {pct(ver_share)} of them are, you're not", "g": -1})
     cands.sort(key=lambda x: x["g"])
     if mkt is not None:
-        lead = L(c.lang, f"{c.sal}, {_metric_label(metric)} up {pct(d)} this week — " + (f"same as {pg.label} ({pct(mkt, signed=True)}), so it's the market, not just you." if abs(d - mkt) < 0.05 else f"vs {pct(mkt, signed=True)} for {pg.label}."),
-                 f"{c.sal}, is hafte {_metric_label(metric)} {pct(d)} upar — " + (f"{pg.label} jaisa hi ({pct(mkt, signed=True)}), yani market ka move hai." if abs(d - mkt) < 0.05 else f"{pg.label} ka {pct(mkt, signed=True)}."))
+        lead = L(c.lang, f"{c.sal}, {_metric_label(metric)} up {pct(d)} this week (magicpin dashboard) — " + (f"same as {pg.label} ({pct(mkt, signed=True)}), so it's the market, not just you." if abs(d - mkt) < 0.05 else f"vs {pct(mkt, signed=True)} for {pg.label}."),
+                 f"{c.sal}, is hafte {_metric_label(metric)} {pct(d)} upar (magicpin dashboard) — " + (f"{pg.label} jaisa hi ({pct(mkt, signed=True)}), yani market ka move hai." if abs(d - mkt) < 0.05 else f"{pg.label} ka {pct(mkt, signed=True)}."))
     else:
         lead = L(c.lang, f"{c.sal}, {_metric_label(metric)} up {pct(d)} this week — a small move.", f"{c.sal}, is hafte {_metric_label(metric)} {pct(d)} upar — chhota move.")
 
     def render(ai):
         ids = [x["id"] for x in cands]
-        picks = [i for i in (ai or {}).get("picks", []) if i in ids][:3] or ids[:3]
+        picks = [i for i in (ai or {}).get("picks", []) if i in ids][:2] or ids[:2]
         chosen = [x for x in cands if x["id"] in picks]
         parts = [lead]
         if chosen:
-            parts += [L(c.lang, "Where you differ (you vs their avg):", "Aap kahan alag ho (aap vs unka avg):"), bullets(x["text"] for x in chosen)]
+            parts += [L(c.lang, f"Where you differ (you vs their avg, {SRC_PEERS[0]}):", f"Aap kahan alag ho (aap vs unka avg, {SRC_PEERS[1]}):"), bullets(x["text"] for x in chosen)]
         parts.append(yes(c.lang, "break down what they do differently + what switching would cost",
                          "Woh kya alag karte hain + switch ka kharcha, bata doon?"))
         return "\n".join(parts)
@@ -594,15 +696,18 @@ def h_seasonal_perf_dip(c: Ctx) -> Draft:
         return dr
     beat = c.beat("Apr-Jun", "acquisition") or c.beat()
     dig = c.digest(kinds=["seasonal"])
-    peer_line = (f" — {c.pg.label} are down {pct(mkt)} too" if mkt is not None else "")
+    peer_line = (f" — {c.pg.label} are down {pct(mkt)} too ({SRC_PEERS[0]})" if mkt is not None else "")
     head = L(c.lang, f"{c.sal}, {_metric_label(metric)} down {pct(d)} this week — that's the season, not you{peer_line}."
              + (f" ({beat['month_range']}: {beat['note']}.)" if beat else ""),
              f"{c.sal}, is hafte {_metric_label(metric)} {pct(d)} neeche — yeh season hai, aap nahi{peer_line}."
              + (f" ({beat['month_range']}: {beat['note']}.)" if beat else ""))
-    tip = (L(c.lang, f"Money-saving tip: {dig['actionable'].rstrip('.')}.", f"Paisa bachane ka tip: {dig['actionable'].rstrip('.')}.")
-           if dig and dig.get("actionable") else "")
-    return weak_spot_draft(c, head, "Seasonal dip confirmed by peers: reassure + weak spots + one cost-saving tip.",
-                           extra_after=tip, exclude_types=(f"drop_{metric}", "drop_calls", "drop_views"))
+    tip = (L(c.lang, f"One way to save during the slow weeks: {dig['actionable'].rstrip('.')}.", f"Slow hafton mein bachat ka ek tareeka: {dig['actionable'].rstrip('.')}.")
+           if dig and dig.get("actionable") else
+           L(c.lang, "One way to use the slow weeks: get a comeback offer ready for past customers, so it's live when demand returns.",
+             "Slow hafton ka ek sahi use: purane customers ke liye comeback offer ready rakhiye, taaki demand lautte hi live ho."))
+    cta = yes(c.lang, "set that up for you", "Main set up kar doon?")
+    return Draft("\n".join([head, tip, cta]), facts=c.base_facts(), offer="slow-season step", followup={"type": "package"},
+                 rationale="Seasonal dip confirmed by peers: reassurance only + one cost-saving step (one story — no gap list).", template_params=[c.sal])
 
 
 def h_milestone(c: Ctx) -> Draft:
@@ -611,7 +716,7 @@ def h_milestone(c: Ctx) -> Draft:
         # only a REAL, calculated milestone: the largest round number actually crossed in the merchant's data
         nice = [100, 250, 500, 750, 1000, 1500, 2000, 2500, 5000, 10000]
         found = None
-        for val, label in ((c.agg.get("total_unique_ytd"), "customers this year"), (c.perf.get("views"), "profile views in 30 days")):
+        for val, label in ((c.agg.get("total_unique_ytd"), "customers this year (your magicpin customer data)"), (c.perf.get("views"), "profile views in 30 days (magicpin dashboard)")):
             if val:
                 crossed = [n for n in nice if n <= val]
                 if crossed and (found is None or crossed[-1] / val > found[0] / found[1]):
@@ -623,7 +728,7 @@ def h_milestone(c: Ctx) -> Draft:
         up = _moves(c.delta, +1)
         if up:
             facts.append(f"{_metric_label(up[0][0]).capitalize()} up {pct(up[0][1])} this week")
-        body = "\n".join([L(c.lang, f"{c.sal}, a milestone worth marking:", f"{c.sal}, ek milestone jo celebrate karna chahiye:"), bullets(facts),
+        body = "\n".join([L(c.lang, f"{c.sal}, {c.mname} just crossed a milestone:", f"{c.sal}, {c.mname} ne abhi ek milestone cross kiya:"), bullets(facts),
                           yes(c.lang, "draft a thank-you post + a review-request message for your regulars",
                               "Regulars ke liye thank-you post + review-request message draft kar doon?")])
         return Draft(body, facts=c.base_facts(), offer="thank-you post + review request", followup={"type": "review_request"},
@@ -666,23 +771,50 @@ def h_renewal_due(c: Ctx) -> Draft:
             follow = {"type": "renewal_link"}
         return Draft(body, facts=c.base_facts(), offer="fix first, renewal later", followup=follow,
                      rationale="Renewal due with weak results: honest bullets + fix-first before asking for money.", template_params=[c.sal])
-    # empty -> data-backed case study, regardless of days left
+    if p.get("rotation"):
+        return _case_study(c)  # #30 scheduled check-in rotation keeps the case-study format
+    # empty -> stay on the renewal: what the plan delivered (sourced) + at most one data-backed step
+    dl, plan = sub.get("days_remaining"), sub.get("plan")
+    why = (L(c.lang, f"{c.sal}, your {plan} plan renews in {dl} days (magicpin subscription). What it delivered in the last 30 days (magicpin dashboard):",
+             f"{c.sal}, aapka {plan} plan {dl} din mein renew hoga (magicpin subscription). Pichhle 30 din mein isne kya diya (magicpin dashboard):")
+           if dl is not None and plan else L(c.lang, f"{c.sal}, ahead of your plan renewal — what it delivered in the last 30 days (magicpin dashboard):",
+                                              f"{c.sal}, plan renewal se pehle — pichhle 30 din mein isne kya diya (magicpin dashboard):"))
+    got = [f"{num(c.perf['views'])} profile views" if c.perf.get("views") else None, f"{c.perf['calls']} calls" if c.perf.get("calls") else None,
+           f"{c.perf['directions']} direction requests" if c.perf.get("directions") else None]
+    if not any(got):
+        return h_generic(c)
+    apply = [x for x in case_patterns(c.universe) if x["applies"](c.merchant)]
+    step = ""
+    if apply:
+        x = apply[0]
+        ex = c.catalog_offer() or "a service @ price"
+        act = {"verified": ("verify your Google profile", "Google profile verify kar lijiye"),
+               "has_offer": (f"put one offer live (e.g. \"{ex}\")", f"ek offer live kijiye (jaise \"{ex}\")")}[x["id"]]
+        step = L(c.lang, f"To get more from it before renewal: {act[0]} — {x['text'][0].lower() + x['text'][1:]} (magicpin data).",
+                 f"Renewal se pehle isse zyada nikalne ke liye: {act[1]} — {x['text'][0].lower() + x['text'][1:]} (magicpin data).")
+    cta = yes(c.lang, "do that first step now", "Pehla step abhi kar doon?") if apply else yes(c.lang, "send the renewal link", "Renewal link bhej doon?")
+    body = "\n".join(x for x in [why, bullets(got), step, cta] if x)
+    return Draft(body, facts=c.base_facts(), offer="renewal value + one step", followup={"type": "fix_first", "fixes": [x["id"] for x in apply[:1]]} if apply else {"type": "renewal_link"},
+                 rationale="Renewal (no details): stays on the renewal — what the plan delivered (sourced) + at most one data-backed step.",
+                 template_params=[c.sal])
+
+
+def _case_study(c: Ctx) -> Draft:
+    """#12 data-backed case study (used by the #30 scheduled check-in rotation)."""
     pats = case_patterns(c.universe)
     apply = [x for x in pats if x["applies"](c.merchant)]
     if not pats:
         return h_generic(c)
     use = apply or pats[:1]
-    steps = []
-    for x in apply:
-        steps.append({"verified": "Verify your Google profile (postcard or phone call)",
-                      "has_offer": f"Put one service+price offer live, e.g. \"{c.catalog_offer() or 'a service @ price'}\""}[x["id"]])
-    body = "\n".join([L(c.lang, f"{c.sal}, a quick case study from magicpin merchants:", f"{c.sal}, magicpin merchants se ek quick case study:"),
+    steps = [{"verified": "Verify your Google profile (postcard or phone call)",
+              "has_offer": f"Put one service+price offer live, e.g. \"{c.catalog_offer() or 'a service @ price'}\""}[x["id"]] for x in apply]
+    body = "\n".join([L(c.lang, f"{c.sal}, a quick case study from magicpin merchants (magicpin data, last 30 days):",
+                        f"{c.sal}, magicpin merchants se ek quick case study (magicpin data, pichhle 30 din):"),
                       bullets(x["text"] + (f" — {x['gap_text']}" if x in apply else "") for x in use),
                       (L(c.lang, "Steps:", "Steps:") + "\n" + bullets(steps)) if steps else L(c.lang, "You're already set up this way — keep it that way.", "Aap pehle se aise set ho — bas yeh bana rahe."),
                       yes(c.lang, "start with the first step", "Pehla step shuru kar doon?") if steps else yes(c.lang, "share one more idea for this month", "Is mahine ke liye ek aur idea bhej doon?")])
     return Draft(body, facts=c.base_facts(), offer="case-study steps", followup={"type": "fix_first", "fixes": [x["id"] for x in apply]},
-                 rationale="Renewal trigger without details: data-backed case study (patterns across ≥3 merchants per group, framed as tendencies).",
-                 template_params=[c.sal])
+                 rationale="Data-backed case study (patterns across ≥3 merchants per group, framed as tendencies).", template_params=[c.sal])
 
 
 def h_winback(c: Ctx) -> Draft:
@@ -731,7 +863,8 @@ def h_dormant(c: Ctx) -> Draft:
     if days is None:
         days = c.payload.get("days_since_last_merchant_message")  # the trigger's own count, stated at trigger time
     head = (L(c.lang, f"{c.sal}, it's been {days} days — a quick check on {c.mname}.", f"{c.sal}, {days} din ho gaye — {c.mname} pe ek quick check.")
-            if days and not c.placeholder else L(c.lang, f"{c.sal}, a quick check on {c.mname}.", f"{c.sal}, {c.mname} pe ek quick check."))
+            if days else L(c.lang, f"{c.sal}, it's been a while since we last spoke — a quick check on {c.mname}:",
+                           f"{c.sal}, kaafi time se baat nahi hui — {c.mname} pe ek quick check:"))
     return weak_spot_draft(c, head, "Dormant merchant: re-open with something useful about their business (weak spots vs peers).")
 
 
@@ -747,6 +880,8 @@ def h_curious_ask(c: Ctx) -> Draft:
          "restaurants": L(c.lang, "Which dish moved fastest this week?", "Is hafte sabse zyada kaunsi dish chali?"),
          "pharmacies": L(c.lang, "What did customers ask for most at the counter this week?", "Is hafte counter pe sabse zyada kya maanga gaya?"),
          }.get(c.slug, L(c.lang, "Which service did customers ask about most this week?", "Is hafte customers ne sabse zyada kaunsi service poochi?"))
+    if len(give) < 2 and own_numbers(c):
+        give.append(own_numbers(c))
     body = "\n".join([L(c.lang, f"Hi {c.sal}! A quick one — and a freebie first:", f"Hi {c.sal}! Ek quick sawaal — pehle ek freebie:"),
                       bullets(give), q,
                       L(c.lang, "Reply with just the name and I'll send back a ready price-reply for WhatsApp.",
@@ -784,7 +919,7 @@ def h_festival(c: Ctx) -> Draft:
         return Draft(body, facts=c.base_facts(), offer=follow["type"], followup=follow, rationale=why, template_params=[c.sal, fest])
     beat = c.beat("festival", "wedding") or c.beat()
     body = "\n".join([L(c.lang, f"{c.sal}, festival season is next on the calendar:", f"{c.sal}, festival season aa raha hai:"),
-                      bullets([f"For {c.slug}, {beat['month_range']} is the {beat['note']}" if beat else None,
+                      bullets([f"For {c.slug}, {beat['month_range']} is the {beat['note']}" if beat else None, own_numbers(c) or None,
                                "Prep: a comeback offer for past customers", f"Timing: have it live before {beat['month_range'].split('-')[0]}" if beat else None]),
                       yes(c.lang, "draft one", "Ek draft kar doon?")])
     return Draft(body, facts=c.base_facts(), offer="festival comeback offer", followup={"type": "package"},
@@ -901,7 +1036,9 @@ def h_heatwave(c: Ctx) -> Draft:
     if city and c.city and city.lower() != c.city.lower():
         return Draft("", skip=True, rationale=f"Heatwave in {city}; merchant is in {c.city} — not relevant.")
     temp = p.get("temp_c") or p.get("temperature_c") or p.get("max_temp_c") or p.get("temperature")
-    event = (f"it's {temp}°C" if temp else "a heatwave is on") + (f" in {city} today" if city else " today")
+    if not temp and not city and not (p.get("alert") or p.get("forecast") or p.get("heat_index")):
+        return Draft("", skip=True, rationale="Heatwave trigger without any weather data — skipped (R2: no evidence, restraint).")
+    event =(f"it's {temp}°C" if temp else "a heatwave is on") + (f" in {city} today" if city else " today")
     actions, en_cta, hi_cta = HEAT_RULES.get(c.slug, (["Adjust today's plans for the heat"], "draft a heat-day post", "Garmi ke din ka post draft kar doon?"))
     extra = []
     if c.slug == "restaurants" and c.neg_theme("delivery_late"):
@@ -987,17 +1124,158 @@ def _greet(c: Ctx, name):
     return f"Hi {name}" if name else "Hi"
 
 
+# =============================================================== trigger-to-business fit (decision, eval round 1)
+# dissociation: 0 = native, 1 = close analogue (map to the nearest intent), 2+ = doesn't fit this business (skip, restraint)
+# intent = (what the merchant is told, en / hi) ; cust = the customer-facing opener
+NATIVE = {
+    "recall_due": (("is due for a routine check-up", "ka routine check-up due hai"), "you're due for your next check-up"),
+    "chronic_refill_due": (("is due for a medicine refill", "ka medicine refill due hai"), "your monthly refill may be due"),
+    "trial_followup": (("is due a follow-up after their trial", "ko trial ke baad follow-up bhejna chahiye"), "hope you enjoyed your trial with us"),
+    "wedding_package_followup": (("has a wedding coming up", "ki shaadi aane wali hai"), "your big day is coming up"),
+    "appointment_tomorrow": (("has an appointment tomorrow", "ka kal appointment hai"), "see you tomorrow"),
+    "customer_lapsed_soft": (("hasn't visited in a while", "kaafi time se nahi aaye"), "it's been a while!"),
+    "customer_lapsed_hard": (("hasn't been back in a long time", "bahut time se wapas nahi aaye"), "it's been a while — we'd love to see you back"),
+}
+FIT = {  # (kind, category) -> (dissociation, mapped intent or None, mapped customer opener or None)
+    ("recall_due", "salons"): (1, ("is due for their regular salon visit", "ka regular salon visit due hai"), "you're due for your regular visit"),
+    ("recall_due", "gyms"): (1, ("is due for a fitness check-in", "ka fitness check-in due hai"), "time for a quick fitness check-in"),
+    ("recall_due", "pharmacies"): (2, None, None), ("recall_due", "restaurants"): (3, None, None),
+    ("chronic_refill_due", "gyms"): (2, None, None),  # was mapped to 'membership top-up': judged forced 3/3 runs -> skip
+    ("chronic_refill_due", "salons"): (1, ("is due for their regular service", "ki regular service due hai"), "you're due for your regular service"),
+    ("chronic_refill_due", "dentists"): (2, None, None), ("chronic_refill_due", "restaurants"): (3, None, None),
+    ("trial_followup", "salons"): (1, ("is due a follow-up after their first visit", "ko pehli visit ke baad follow-up bhejna chahiye"), "hope you loved your first visit"),
+    ("trial_followup", "dentists"): (1, ("is due a follow-up after their first consultation", "ko pehli consultation ke baad follow-up bhejna chahiye"), "hope your first consultation went well"),
+    ("trial_followup", "restaurants"): (1, ("is due a follow-up after their first visit", "ko pehli visit ke baad follow-up bhejna chahiye"), "hope you enjoyed your first meal with us"),
+    ("trial_followup", "pharmacies"): (2, None, None),
+    ("wedding_package_followup", "gyms"): (1, ("has a wedding coming up — a wedding-prep plan fits", "ki shaadi aane wali hai — wedding-prep plan sahi rahega"), "your big day is coming up"),
+    ("wedding_package_followup", "dentists"): (1, ("has a wedding coming up — a pre-wedding smile check fits", "ki shaadi aane wali hai — pre-wedding smile check sahi rahega"), "your big day is coming up"),
+    ("wedding_package_followup", "restaurants"): (2, None, None), ("wedding_package_followup", "pharmacies"): (3, None, None),
+    ("appointment_tomorrow", "restaurants"): (1, ("has a table booked for tomorrow", "ka kal table booked hai"), "see you tomorrow"),
+    ("appointment_tomorrow", "pharmacies"): (2, None, None),
+    ("supply_alert", "dentists"): (2, None, None), ("supply_alert", "salons"): (3, None, None), ("supply_alert", "gyms"): (3, None, None),
+    ("supply_alert", "restaurants"): (3, None, None),
+    ("cde_opportunity", "salons"): (2, None, None), ("cde_opportunity", "gyms"): (2, None, None),
+    ("cde_opportunity", "restaurants"): (3, None, None), ("cde_opportunity", "pharmacies"): (2, None, None),
+}
+
+
+def fit(kind: str, slug: str):
+    """-> (dissociation, (intent_en, intent_hi) | None, customer opener | None)"""
+    if (kind, slug) in FIT:
+        return FIT[(kind, slug)]
+    nat = NATIVE.get(kind)
+    return (0, nat[0], nat[1]) if nat else (0, None, None)
+
+
+OPENER_HI = {
+    "you're due for your next check-up": "aapka next check-up due hai", "your monthly refill may be due": "aapka monthly refill due ho sakta hai",
+    "hope you enjoyed your trial with us": "umeed hai aapko trial accha laga", "your big day is coming up": "aapka bada din aa raha hai",
+    "see you tomorrow": "kal milte hain", "it's been a while!": "kaafi time ho gaya!",
+    "it's been a while — we'd love to see you back": "kaafi time ho gaya — aapko wapas dekhna accha lagega",
+    "you're due for your regular visit": "aapki regular visit due hai", "time for a quick fitness check-in": "ek quick fitness check-in ka time",
+    "your membership may be due for a top-up": "aapki membership top-up due ho sakti hai", "you're due for your regular service": "aapki regular service due hai",
+    "hope you loved your first visit": "umeed hai pehli visit acchi lagi", "hope your first consultation went well": "umeed hai pehli consultation acchi rahi",
+    "hope you enjoyed your first meal with us": "umeed hai pehla meal accha laga",
+}
+
+
+def sender(c: Ctx) -> str:
+    """Who signs a customer-facing message: 'Dr. Asha from Asha Dental Care', or just the business name."""
+    who = (c.sal or "").strip()
+    last = who.split()[-1].lower() if who else ""
+    if c.slug == "dentists" and who.startswith("Dr"):
+        return f"{who}, {c.mname}" if last in c.mname.lower() else f"{who} from {c.mname}"
+    return f"{who} from {c.mname}" if who and last not in c.mname.lower() else c.mname
+
+
+def brand_line(c: Ctx) -> str:
+    """A positive, business-centric line built only from real data (or the merchant's own tagline, if they gave one)."""
+    own = (c.merchant.get("_tagline") or "").strip()
+    if own:
+        return f"✨ {own}"
+    pos = c.pos_theme()
+    year = (c.ident or {}).get("established_year")
+    where = f", {c.locality}" if c.locality else ""
+    since = f" — serving {c.locality or c.city} since {year}" if year and (c.locality or c.city) else ""
+    if pos and pos.get("common_quote"):
+        return f"💬 “{pos['common_quote']}” — {c.mname}{since or where}"
+    if since:
+        return f"⭐ {c.mname}{since}"
+    return f"📍 {c.mname}{where}" if where else ""
+
+
+def with_brand(c: Ctx, customer_body: str) -> str:
+    """Insert the brand line just above the customer draft's final call-to-action line."""
+    line = brand_line(c)
+    if not line or line in customer_body:
+        return customer_body
+    lines = customer_body.split("\n")
+    return "\n".join(lines[:-1] + [line, lines[-1]]) if len(lines) > 1 else customer_body + "\n" + line
+
+
+def approval_ask(c: Ctx) -> str:
+    return L(c.lang, "Send it? Reply YES — or send your own tagline / changes and I'll use them for your brand.",
+             "Bhej doon? Reply YES — ya apni tagline / changes bhejiye, main aapke brand ke liye wahi use karungi.")
+
+
 def ask_merchant(c: Ctx, what_en: str, what_hi: str) -> Draft:
     """Empty customer trigger: route to the merchant for approval instead of messaging the customer."""
-    who = customer_first(c.customer) or name_from_customer_id(c.trigger.get("customer_id")) or L(c.lang, "one of your customers", "aapke ek customer")
+    d = _approval_from_history(c)
+    if d:
+        return d
+    return _plain_ask(c, what_en, what_hi)
+
+
+def _approval_from_history(c: Ctx):
+    """Customer profile is known but the trigger has no details: why-now from the trigger type (mapped to this business),
+    the customer's real history with its source, and a ready draft for one-tap approval."""
+    cu = c.customer or {}
+    rel = cu.get("relationship") or {}
+    name = customer_first(cu)
+    if not (name and rel.get("last_visit")) or (cu.get("preferences") or {}).get("reminder_opt_in") is False:
+        return None
+    if c.kind == "trial_followup" and int(rel.get("visits_total") or 0) >= 3:
+        return Draft("", skip=True, rationale=f"Trial follow-up, but the customer already has {rel.get('visits_total')} visits — the data contradicts a trial (restraint).")
+    _, intent, opener = fit(c.kind, c.slug)
+    intent = intent or ("is due a friendly check-in", "ko ek friendly check-in bhejna sahi rahega")
+    ago = c.days_since(rel["last_visit"], None)
+    ago_txt = f" — {ago} days ago" if ago and ago > 0 else ""
+    facts = [f"Last visit: {nice_date(rel['last_visit'])}{ago_txt}",
+             (f"{rel['visits_total']} visits" if rel.get("visits_total") else "") +
+             (f", {inr(rel['lifetime_value'])} spent with you" if rel.get("lifetime_value") else "")]
+    emoji = {"dentists": " 🦷", "gyms": " 💪", "salons": " ✨", "restaurants": " 🍽️", "pharmacies": ""}.get(c.slug, "")
+    nxt = {"dentists": "check-up", "gyms": "session", "salons": "appointment", "restaurants": "table"}.get(c.slug, "visit")
+    op = opener or "it's been a while!"
+    op = OPENER_HI.get(op, op) if c.clang in ("hindi", "hinglish") else op
+    here = L(c.clang, f"{sender(c)} here", f"{sender(c)} se")
+    cust = "\n".join([f"{_greet(c, name)}, {here}{emoji} — {op}",
+                      bullets([f"Last visit: {nice_date(rel['last_visit'])}" + (f" ({ago} days ago)" if ago and ago > 0 else ""),
+                               f"Visits with us: {rel['visits_total']}" if rel.get("visits_total") else None]),
+                      L(c.clang, f"Want us to hold a slot for your next {nxt}? Reply YES.", f"Aapke next {nxt} ke liye slot rakh dein? Reply YES.")])
+    draft = with_brand(c, cust)
+    quoted = "\n".join("> " + ln if ln.strip() else ">" for ln in draft.split("\n"))
+    body = "\n".join([L(c.lang, f"{c.sal}, {name} {intent[0]} (your customer records):", f"{c.sal}, {name} {intent[1]} (aapke customer records):"),
+                      bullets(facts), "", L(c.lang, "Here's what I'd send on your behalf:", "Aapki taraf se main yeh bhejungi:"), quoted, "",
+                      approval_ask(c)])
+    return Draft(body, "binary_yes_stop", "vera", c.base_facts() | {"customer_draft": draft}, offer=f"send {name} a message",
+                 followup={"type": "send_customer_reminder", "who": name, "draft": draft, "brand": brand_line(c)},
+                 rationale="Customer trigger without details: why-now from the trigger type (mapped to this business), sourced visit history, ready draft for one-tap approval.",
+                 template_params=[c.sal, name])
+
+
+def _plain_ask(c: Ctx, what_en: str, what_hi: str) -> Draft:
+    who = customer_first(c.customer) or name_from_customer_id(c.trigger.get("customer_id")) or \
+        str((c.payload or {}).get("customer_name") or "").split(" ")[0].strip() or L(c.lang, "one of your customers", "aapke ek customer")
     rel = (c.customer or {}).get("relationship", {})
     hist = []
     if rel.get("last_visit"):
         hist.append(f"last visit {nice_date(rel['last_visit'], True)}")
     if rel.get("visits_total"):
         hist.append(f"{rel['visits_total']} visits")
-    body = L(c.lang, f"{c.sal}, {who}" + (f" ({', '.join(hist)})" if hist else "") + f" {what_en}. Want me to send them a reminder on your behalf? Reply YES.",
-             f"{c.sal}, {who}" + (f" ({', '.join(hist)})" if hist else "") + f" {what_hi}. Aapki taraf se reminder bhej doon? Reply YES.")
+    facts = [] if c.placeholder else payload_facts(c)
+    fb = ("\n" + bullets(facts) + "\n") if facts else " "
+    body = L(c.lang, f"{c.sal}, {who}" + (f" ({', '.join(hist)})" if hist else "") + f" {what_en}." + fb + "Want me to send them a follow-up on your behalf? Reply YES.",
+             f"{c.sal}, {who}" + (f" ({', '.join(hist)})" if hist else "") + f" {what_hi}." + fb + "Aapki taraf se follow-up bhej doon? Reply YES.")
     return Draft(body, facts=c.base_facts(), offer=f"send {who} a reminder", followup={"type": "send_customer_reminder", "who": who},
                  rationale="Customer trigger without details: ask the merchant first instead of guessing (respects consent, invents nothing).",
                  template_params=[c.sal, who])
@@ -1016,7 +1294,7 @@ def h_recall_due(c: Ctx) -> Draft:
     if not live:
         return ask_merchant(c, "is due for a visit, but the offered slots have passed", "ka visit due hai, par diye gaye slots nikal gaye")
     slots = [s.get("label") for s in live[:2]]
-    head = f"{_greet(c, name)}, {c.mname} here{emoji} " + L(c.clang, f"Your {svc} is due" + (f" (last: {lv})." if lv else "."),
+    head = f"{_greet(c, name)}, {sender(c)} here{emoji} " + L(c.clang, f"Your {svc} is due" + (f" (last: {lv})." if lv else "."),
                                                           f"Aapka {svc} due hai" + (f" (last: {lv})." if lv else "."))
     items = ([f"{off.split('@')[0].strip()}: {inr(_price(off))}"] if off and _price(off) else []) + [f"Slot {i + 1}: {s}" for i, s in enumerate(slots)]
     body = "\n".join([head, bullets(items), L(c.clang, "Reply 1 or 2 — or tell us a time that suits you.", "Reply 1 ya 2 — ya apna time batayein.")])
@@ -1034,7 +1312,7 @@ def h_appointment_tomorrow(c: Ctx) -> Draft:
              L(c.clang, f"Where: {c.mname}" + (f", {c.locality}" if c.locality else ""), f"Kahan: {c.mname}" + (f", {c.locality}" if c.locality else ""))]
     if p.get("service"):
         items.insert(0, f"Service: {humanize(p['service'])}")
-    body = "\n".join([f"{_greet(c, name)}, {c.mname} " + L(c.clang, "here 👋 Quick reminder:", "se 👋 Ek quick reminder:"), bullets(items),
+    body = "\n".join([f"{_greet(c, name)}, {sender(c)} " + L(c.clang, "here 👋 Quick reminder:", "se 👋 Ek quick reminder:"), bullets(items),
                       L(c.clang, "Reply YES to confirm, or send a better time and we'll move it.", "Confirm karne ke liye YES reply karein, ya naya time bhejein — hum shift kar denge.")])
     return Draft(body, "binary_yes_stop", "merchant_on_behalf", c.base_facts() | {"customer": c.customer}, offer="confirm appointment",
                  followup={"type": "confirm_appt"}, rationale="Appointment reminder: bullets, never an invented time.", template_params=[name, c.mname])
@@ -1054,10 +1332,10 @@ def h_chronic_refill(c: Ctx) -> Draft:
                 "Delivery: saved address pe" if p.get("delivery_address_saved") else "Delivery: address bata dijiye"),
               senior, deliv]
     if c.clang in ("hindi", "hinglish"):
-        head = f"Namaste {name_part}, {c.mname} se 🙏\n" + (f"Aapki monthly dawaiyan {runs} ko khatam ho gayi hongi:" if past else f"Aapki monthly dawaiyan {runs} tak khatam ho jayengi:")
+        head = (f"Namaste {name_part}, " if name_part else "Namaste! ") + f"{c.mname} se 🙏\n" + (f"Aapki monthly dawaiyan {runs} ko khatam ho gayi hongi:" if past else f"Aapki monthly dawaiyan {runs} tak khatam ho jayengi:")
         close = "Confirm karne ke liye YES reply karein."
     else:
-        head = f"Hi {name_part}, {c.mname} here.\nYour monthly medicines " + (f"were due for a refill on {runs}:" if past else f"run out on {runs}:")
+        head = (f"Hi {name_part}, " if name_part else "Hi! ") + f"{sender(c)} here.\nYour monthly medicines " + (f"were due for a refill on {runs}:" if past else f"run out on {runs}:")
         close = "Reply YES to confirm."
     body = "\n".join([head, bullets(m.capitalize() for m in p["molecule_list"]), "", bullets(extras), close])
     return Draft(body, "binary_yes_stop", "merchant_on_behalf", c.base_facts() | {"customer": c.customer}, offer="deliver refill",
@@ -1067,9 +1345,13 @@ def h_chronic_refill(c: Ctx) -> Draft:
 
 def h_trial_followup(c: Ctx) -> Draft:
     p = c.payload
-    opts = [o.get("label") for o in p.get("next_session_options") or [] if o.get("label")]
+    opts = [o.get("label") for o in p.get("next_session_options") or []
+            if o.get("label") and (not o.get("iso") or (c.days_until(o.get("iso"), 0) or 0) >= 0)]
     if c.placeholder or not opts:
-        return ask_merchant(c, "did a trial recently", "ne haal hi mein trial kiya")
+        if p.get("next_session_options"):
+            return ask_merchant(c, "did a trial with you, but the next session we had offered has already passed",
+                                "ne aapke yahan trial kiya tha, par jo next session offer kiya tha woh nikal gaya")
+        return ask_merchant(c, "did a trial with you", "ne aapke yahan trial kiya tha")
     parent, kid = parent_name(c.customer), child_name(c.customer)
     name = parent or customer_first(c.customer)
     thanks = (f"Thanks for bringing {kid} for the trial on {nice_date(p.get('trial_date'))}!" if parent and kid
@@ -1078,7 +1360,7 @@ def h_trial_followup(c: Ctx) -> Draft:
     pos = next((t for t in c.merchant.get("review_themes") or [] if t.get("sentiment") == "pos" and t.get("theme") == "small_classes"), None) or c.pos_theme()
     proof = (f"Parents love our {humanize(pos['theme'])} — {pos['occurrences_30d']} reviews this month mention it." if pos and parent else
              f"{pos['occurrences_30d']} reviews this month mention our {humanize(pos['theme'])}." if pos else "")
-    body = "\n".join([f"Hi {name}, {c.mname} here 🧘 {thanks}" if c.slug == "gyms" else f"Hi {name}, {c.mname} here. {thanks}", bullets(items), proof,
+    body = "\n".join([f"Hi {name}, {sender(c)} here 🧘 {thanks}" if c.slug == "gyms" else f"Hi {name}, {sender(c)} here. {thanks}", bullets(items), proof,
                       "Reply YES to book, or tell us a better time."])
     return Draft(body, "binary_yes_stop", "merchant_on_behalf", c.base_facts() | {"customer": c.customer}, offer="book next session",
                  followup={"type": "booking", "slots": opts}, rationale="Trial follow-up: bullets + real review proof, addressed to the parent.", template_params=[name, c.mname])
@@ -1087,11 +1369,13 @@ def h_trial_followup(c: Ctx) -> Draft:
 def h_customer_lapsed_soft(c: Ctx) -> Draft:
     name = customer_first(c.customer)
     rel = (c.customer or {}).get("relationship", {})
-    items = [f"Last visit: {nice_date(rel['last_visit'])}" if rel.get("last_visit") else None,
+    ago = c.days_since(rel.get("last_visit"), None) if rel.get("last_visit") else None
+    items = [f"Last visit: {nice_date(rel['last_visit'])}" + (f" ({ago} days ago, as per our records)" if ago and ago > 0 else " (as per our records)")
+             if rel.get("last_visit") else None,
              f"Visits with us: {rel['visits_total']}" if rel.get("visits_total") else None]
     emoji = {"dentists": " 🦷", "gyms": " 💪", "salons": " ✨"}.get(c.slug, "")
     nxt = {"dentists": "check-up", "gyms": "session", "salons": "appointment"}.get(c.slug, "visit")
-    head = f"{_greet(c, name)}, {c.mname} " + L(c.clang, f"here{emoji} — it's been a while!", f"se{emoji} — kaafi time ho gaya!")
+    head = f"{_greet(c, name)}, {sender(c)} " + L(c.clang, f"here{emoji} — it's been a while!", f"se{emoji} — kaafi time ho gaya!")
     if c.slug in ("pharmacies", "restaurants"):
         ask = L(c.clang, "Anything you need this week? Reply YES and we'll keep it ready.", "Is hafte kuch chahiye? YES reply karein, hum ready rakhenge.")
     else:
@@ -1108,12 +1392,12 @@ def h_customer_lapsed_hard(c: Ctx) -> Draft:
     focus = humanize(p.get("previous_focus") or prefs.get("training_focus") or "")
     months = p.get("previous_membership_months")
     lv = ((c.customer or {}).get("relationship") or {}).get("last_visit")
-    days = c.days_since(lv, p.get("days_since_last_visit")) if lv else (p.get("days_since_last_visit") if c.now is None else None)
+    days = c.days_since(lv, p.get("days_since_last_visit")) if lv else p.get("days_since_last_visit")
     slot = humanize(prefs.get("preferred_slots", ""))
     items = [f"Your {focus} plan" + (f" from your {months} months with us" if months else "") + " is still on file" if focus else None,
              f"{slot.capitalize()} slots are open for you" if slot else None]
-    body = "\n".join([f"{_greet(c, name)}, {c.mname} here 💪 " + (f"It's been {days} days — no pressure, just checking in." if days else "No pressure, just checking in."),
-                      bullets(items), "Reply YES and we'll hold one this week."])
+    body = "\n".join([f"{_greet(c, name)}, {sender(c)} here 💪 " + (f"It's been {days} days — no pressure, just checking in." if days else "No pressure, just checking in."),
+                      bullets(items), "Reply YES and we'll hold a slot for you this week."])
     return Draft(body, "binary_yes_stop", "merchant_on_behalf", c.base_facts() | {"customer": c.customer}, offer="hold a comeback slot",
                  followup={"type": "confirm_slot"}, rationale="Hard-lapsed ex-member: warm, personal, no new-customer offer.", template_params=[name, c.mname])
 
@@ -1128,10 +1412,347 @@ def h_wedding(c: Ctx) -> Draft:
     dtw = c.days_until(p.get("wedding_date"), p.get("days_to_wedding"))
     if dtw is not None and dtw < 0:
         return Draft("", skip=True, rationale="Wedding date has already passed on the judge's clock — skipped.")
-    body = "\n".join([f"Hi {name} 💍 {c.mname} here — " + (f"{dtw} days to your wedding!" if dtw else "your wedding is coming up!"),
+    body = "\n".join([f"Hi {name} 💍 {sender(c)} here — " + (f"{dtw} days to your wedding!" if dtw else "your wedding is coming up!"),
                       bullets(items), f"Want us to hold a {pref.title()} slot next week to plan it? Reply YES." if pref else "Want us to hold a slot next week to plan it? Reply YES."])
     return Draft(body, "binary_yes_stop", "merchant_on_behalf", c.base_facts() | {"customer": c.customer}, offer="hold bridal planning slot",
                  followup={"type": "confirm_slot"}, rationale="Bridal follow-up: countdown bullets, preferred day, no invented price.", template_params=[name, c.mname])
+
+
+ASK_WHAT = {
+    "customer_lapsed_hard": ("hasn't visited in a while", "kaafi time se nahi aaye"),
+    "customer_lapsed_soft": ("hasn't visited recently", "haal mein nahi aaye"),
+    "wedding_package_followup": ("has a wedding coming up", "ki shaadi aane wali hai"),
+    "trial_followup": ("did a trial with you", "ne aapke yahan trial kiya tha"),
+    "chronic_refill_due": ("may be due for a refill", "ka refill due ho sakta hai"),
+    "appointment_tomorrow": ("has an appointment tomorrow", "ka kal appointment hai"),
+}
+SKIP_KEYS = {"placeholder", "rotation", "customer_id", "merchant_id", "id", "trigger_id"}
+
+
+def _fmt_val(k, v):
+    if isinstance(v, bool):
+        return None
+    if isinstance(v, str) and re.match(r"\d{4}-\d{2}-\d{2}", v):
+        return nice_date(v)
+    if isinstance(v, (int, float)):
+        return num(v)
+    if isinstance(v, str):
+        return humanize(v)
+    if isinstance(v, list) and v and all(isinstance(x, str) for x in v):
+        return ", ".join(humanize(x) for x in v[:4])
+    return None
+
+
+FACT_LABELS = {
+    "days_since_last_visit": "Last visit: {} days ago", "previous_focus": "Goal: {}", "previous_membership_months": "Member for {} months",
+    "trial_completed": "Bridal trial done: {}", "next_step_window_open": "Next step: {}", "molecule_list": "Medicines: {}",
+    "last_refill": "Last refill: {}", "stock_runs_out_iso": "Stock runs out: {}", "service_due": "Due for: {}",
+    "last_service_date": "Last visit: {}", "due_date": "Due by: {}", "trial_date": "Trial: {}",
+}
+
+
+def payload_facts(c: Ctx, limit: int = 3) -> list[str]:
+    """Readable bullets straight from the trigger payload (no invented values). Day counts follow the judge's clock."""
+    p, out = c.payload or {}, []
+    if p.get("wedding_date"):
+        dtw = c.days_until(p.get("wedding_date"), p.get("days_to_wedding"))
+        out.append(f"Wedding: {nice_date(p['wedding_date'])}" + (f" ({dtw} days away)" if dtw and dtw > 0 else ""))
+    for k, v in p.items():
+        if k in SKIP_KEYS or k.endswith("_id") or k in ("wedding_date", "days_to_wedding", "customer_name"):
+            continue
+        val = _fmt_val(k, v)
+        if not val:
+            continue
+        val = val.replace("program 30day", "30-day program").replace("skin prep", "skin-prep")
+        out.append(FACT_LABELS[k].format(val) if k in FACT_LABELS else f"{humanize(re.sub(r'_iso$', '', k)).capitalize()}: {val}")
+    return out[:limit]
+
+
+RELATION_WORDS = {"grandfather", "grandmother", "father", "mother", "dad", "mom", "parent", "uncle", "aunt", "son", "daughter", "customer"}
+
+
+def _merchant_approval(category, merchant, trigger, universe, now, c: Ctx):
+    """Customer trigger but the customer's profile was never shared with us.
+    Decision #20/#22/#23 = ask the merchant first. Instead of a vague ask, show the real trigger facts and the exact
+    message Vera would send, so the merchant can approve with one YES."""
+    cid = trigger.get("customer_id")
+    who = name_from_customer_id(cid)
+    if not who or c.placeholder or not payload_facts(c):
+        return None
+    relation = who.lower() in RELATION_WORDS
+    name_for_draft = "" if relation else who
+    if relation:
+        who = L(c.lang, "one of your regular customers", "aapke ek regular customer")
+    lang_pref = {"hinglish": "hi-en", "hindi": "hi"}.get(c.lang, "en")
+    pseudo = {"customer_id": cid, "identity": {"name": name_for_draft or "(unknown)", "language_pref": lang_pref}, "relationship": {}, "preferences": {}}
+    c2 = Ctx(category, merchant, trigger, pseudo, universe, now)
+    handler = HANDLERS.get(c.kind)
+    try:
+        inner = handler(c2) if handler else None
+    except Exception:
+        inner = None
+    if not inner or inner.skip or not inner.body or inner.send_as != "merchant_on_behalf":
+        return None
+    facts = payload_facts(c2)
+    draft = with_brand(c, inner.body)
+    quoted = "\n".join("> " + ln if ln.strip() else ">" for ln in draft.split("\n"))
+    _, intent, _o = fit(c.kind, c.slug)
+    intent = intent or ("is worth a personal message today", "ko aaj ek personal message bhejna sahi rahega")
+    head = L(c.lang, f"{c.sal}, {who[0].upper() + who[1:]} {intent[0]}:", f"{c.sal}, {who} {intent[1]}:")
+    mid = L(c.lang, "Here's what I'd send on your behalf:", "Aapki taraf se main yeh bhejungi:")
+    body = "\n".join([head, bullets(facts), "", mid, quoted, "", approval_ask(c)])
+    return Draft(body, "binary_yes_stop", "vera", c.base_facts() | {"customer_draft": draft},
+                 offer=f"send {who} the message", followup={"type": "send_customer_reminder", "who": who, "draft": draft, "brand": brand_line(c)},
+                 rationale="Customer trigger without the customer's profile: merchant approves a ready draft built only from trigger facts (consent first, nothing invented).",
+                 template_params=[c.sal, who])
+
+
+# =============================================================== unknown trigger kinds (decision: "read the trigger", eval round 4)
+# New kinds can be injected mid-test. 1) nearest known kind, if the payload has fields that handler actually reads;
+# 2) otherwise the trigger reader: the trigger's own facts (code) + one AI line + one concrete action; 3) no data -> skip.
+ALIASES = [  # (target kind, name pattern) — checked in order
+    ("wedding_package_followup", r"bridal|wedding|shaadi"), ("chronic_refill_due", r"refill"),
+    ("recall_due", r"recall(?!_batch)|check_?up_due|revisit"), ("customer_lapsed_soft", r"lapsed|inactive_customer|churn"),
+    ("appointment_tomorrow", r"appointment"), ("trial_followup", r"trial"), ("competitor_opened", r"competitor|rival"),
+    ("festival_upcoming", r"festival|diwali|holi|eid|navratri|durga|onam|pongal|christmas"), ("ipl_match_today", r"ipl|cricket"),
+    ("weather_heatwave", r"heat"), ("review_theme_emerged", r"review_theme"), ("perf_spike", r"spike|surge"),
+    ("perf_dip", r"perf_(dip|drop)|(views|calls|traffic)_(dip|drop)"), ("milestone_reached", r"milestone"),
+    ("renewal_due", r"renew|subscription_expir|plan_expir"), ("research_digest", r"research|digest|study"),
+    ("regulation_change", r"regulation|compliance|circular|guideline"), ("supply_alert", r"supply|shortage|recall_batch"),
+    ("category_trend_movement", r"trend"), ("local_news_event", r"news"), ("gbp_unverified", r"gbp|unverified"),
+]
+TEXT_KEYS = ("review_text", "text", "comment", "message", "quote", "feedback", "headline", "summary", "description", "note")
+# ---- trigger rating (decision, round 4b): classify every new trigger as good / bad news BEFORE choosing words and tone
+# -2 = needs attention today · -1 = heads-up · 0 = update · +1 = good news · +2 = great news (code only: deterministic, explainable)
+GOOD_METRICS = r"(?:^|_| )(view|call|order|booking|revenue|sale|footfall|rating|review_count|lead|search|demand|member|signup|enrol|join|subscriber|customer|cover|conversion|ctr|score|visit|enquir|payout|cashback|bonus|crowd)"
+BAD_METRICS = r"(?:^|_| )(cost|price|rent|fee|commission|tax|gst|wait|delay|complaint|cancel|refund|return|no_show|churn|rain|temp|aqi|pollution|fuel|shortage|expir|penalty|dispute)"
+UP_WORDS = r"(?:^|_)(hike|rise|surge|spike|increase|jump|growth|gain|record|up|higher)(?:_|$)"
+DOWN_WORDS = r"(?:^|_)(drop|dip|fall|decline|decrease|loss|slump|down|lower)(?:_|$)"
+BAD_EVENTS = (r"(?:^|_)(complaint|negative|fail|delay|late|outage|closure|closed|strike|bandh|flood|storm|cyclone|monsoon|rain|heavy|fog|smog|"
+              r"cold_wave|shortage|expir|penalt|suspend|violation|dispute|chargeback|fraud|block|reject|cancel|no_show|overdue|warning|lost)")
+GOOD_EVENTS = (r"(?:^|_)(milestone|award|top|best|featured|won|approved|verified|record|positive|bulk_order|new_order|bonus|cashback|credited|"
+               r"restock|back_in_stock|anniversary|festival|fair|mela|concert|marathon|carnival)")
+BAD_TEXT = r"\b(cold|late|rude|dirty|bad|worst|waited|never|disappointed|overpriced|slow|stale|unhygienic|pain|hurt|wrong|missing|refund|horrible|terrible|poor)\b"
+GOOD_TEXT = r"\b(great|amazing|loved|love|best|excellent|friendly|clean|recommend|awesome|fantastic|perfect|wonderful|happy|thank)\b"
+
+
+def rate_trigger(kind: str, p: dict, quote: str = ""):
+    """-> (rating -2..+2, reasons). Signals: event words in the type name, the direction of numbers x whether that metric
+    is good or bad when it rises, star ratings, and the tone of any quoted text. No signal = 0 (plain update)."""
+    k, sig, why = (kind or "").lower(), 0, []
+    big = False
+    if re.search(BAD_EVENTS, k):
+        sig -= 1; why.append("bad-news event")
+    if re.search(GOOD_EVENTS, k):
+        sig += 1; why.append("good-news event")
+    # direction: from/to pairs, then signed deltas, then the type name
+    direction, metric = 0, k
+    for key, v in p.items():
+        m = re.match(r"(from|old|previous|before)_(\w+)$", key)
+        if m and isinstance(v, (int, float)):
+            for pre in ("to", "new", "current", "after"):
+                v2 = p.get(f"{pre}_{m.group(2)}")
+                if isinstance(v2, (int, float)) and v2 != v:
+                    direction, metric = (1 if v2 > v else -1), m.group(2) + " " + k
+                    move = abs(v2 - v) / max(abs(v), 1e-9)
+                    big = big or move >= (0.05 if "rating" in m.group(2) else 0.2)
+    if not direction:
+        for key, v in p.items():
+            if isinstance(v, (int, float)) and not isinstance(v, bool) and re.search(r"delta|change|pct|percent|growth", key) and v:
+                direction, metric = (1 if v > 0 else -1), key + " " + k
+                big = abs(v) >= (20 if abs(v) > 1 else 0.2)
+                break
+    if not direction:
+        direction = 1 if re.search(UP_WORDS, k) else -1 if re.search(DOWN_WORDS, k) else 0
+    if direction:
+        pol = -1 if re.search(BAD_METRICS, metric) else 1 if re.search(GOOD_METRICS, metric) else 0
+        if pol:
+            sig += direction * pol * (2 if big else 1)
+            why.append(f"{'rising' if direction > 0 else 'falling'} {'bad' if pol < 0 else 'good'} metric{' (big move)' if big else ''}")
+    stars = next((v for key, v in p.items() if re.search(r"^(rating|stars|star_rating|review_rating)$", key) and isinstance(v, (int, float))), None)
+    if stars is not None:
+        s = -2 if stars <= 2 else -1 if stars < 4 else 2 if stars >= 4.5 else 1
+        sig += s; why.append(f"{stars:g}-star")
+    if quote:
+        b, g = len(re.findall(BAD_TEXT, quote.lower())), len(re.findall(GOOD_TEXT, quote.lower()))
+        if b != g:
+            sig += 1 if g > b else -1; why.append("positive text" if g > b else "negative text")
+    rating = 0 if sig == 0 else (1 if sig > 0 else -1) * (2 if abs(sig) >= 2 else 1)
+    return rating, why
+
+
+TONE = {  # opener (en, hi), emoji allowed, AI tone instruction
+    2: ("great news", "badhiya khabar", "🎉", "celebratory and warm, then point to keeping the momentum"),
+    1: ("good news", "achhi khabar", "", "upbeat and encouraging"),
+    0: ("quick update", "ek quick update", "", "neutral, brief and useful"),
+    -1: ("a heads-up", "ek heads-up", "", "calm and practical, no alarm"),
+    -2: ("this needs your attention today", "aaj dhyan dene wali baat", "", "calm, reassuring and action-first: it is fixable; never alarmist, no emoji"),
+}
+# family: (name pattern, subject en, subject hi, source, {"bad"|"neutral"|"good": (line en, line hi, cta en, cta hi)})
+READER = [
+    (r"review|rating|feedback|complaint|star", "{m}'s reviews", "{m} ke reviews", "Google reviews", {
+        "bad": ("A calm, personal reply today shows every future customer that you care.", "Aaj hi ek shaant, personal reply dikhata hai ki aap care karte ho — baaki customers bhi yeh padhte hain.",
+                "draft a short, polite reply you can post", "Main ek short, polite reply draft kar doon?"),
+        "bad_noquote": ("Fresh replies and a few new happy-customer reviews are the quickest way to lift it back.", "Naye replies aur kuch khush customers ke reviews se rating sabse jaldi wapas upar aati hai.",
+                        "draft a short WhatsApp asking your happy regulars for a review", "Khush regulars se review maangne ka ek short WhatsApp draft kar doon?"),
+        "neutral": ("A quick reply shows every future customer that you're listening.", "Ek quick reply dikhata hai ki aap sun rahe ho.",
+                    "draft a short reply you can post", "Ek short reply draft kar doon?"),
+        "good": ("Happy customers are your best advert — worth thanking them where others can see it.", "Khush customers sabse achha advert hain — sabke saamne unhe thank karna banta hai.",
+                 "draft a warm thank-you reply you can post", "Ek warm thank-you reply draft kar doon?")}),
+    (r"slot|capacity|cancel|no_show|vacan|table_free|chair", "a slot just opened at {m}", "{m} mein ek slot abhi khali hua", "your bookings", {
+        "bad": ("An empty slot is lost income — your regular customers can fill it fastest.", "Khali slot matlab nuksaan — regular customers ise sabse jaldi bhar sakte hain.",
+                "draft a WhatsApp to offer it to your regulars", "Regulars ko offer karne ke liye ek WhatsApp draft kar doon?"),
+        "neutral": ("Offering it to your regular customers fills it faster than waiting for walk-ins.", "Regular customers ko offer karne se yeh walk-in ke intezaar se jaldi bharta hai.",
+                    "draft a WhatsApp to offer it to your regulars", "Regulars ko offer karne ke liye ek WhatsApp draft kar doon?")}),
+    (r"weather|rain|monsoon|flood|cold|fog|storm|aqi|pollution|fuel|strike|bandh|traffic|power|outage|holiday|closure|event|election|exam|fair|mela|match|festival|nearby|crowd|concert|marathon|carnival",
+     "local update for {loc}", "{loc} ka local update", "local alert", {
+        "bad": ("Days like this change footfall — a quick note on timings or delivery keeps customers coming.", "Aise din footfall badalta hai — timings ya delivery pe ek chhota note customers ko jode rakhta hai.",
+                "draft a short customer note for today", "Aaj ke liye ek chhota customer note draft kar doon?"),
+        "neutral": ("A short, timely note to customers keeps you top of mind on days like this.", "Aise din ek chhota, timely note customers ko aapki yaad dilata hai.",
+                    "draft a short customer post for today", "Aaj ke liye ek chhota customer post draft kar doon?"),
+        "good": ("More people will be out and about — a timely post puts you in front of them.", "Zyada log bahar honge — ek timely post aapko unke saamne laata hai.",
+                 "draft a short post to catch the crowd", "Crowd ke liye ek chhota post draft kar doon?")}),
+    (r"search|demand|query|lead|enquir|interest|intent", "customer demand for {m}", "{m} ke liye customer demand", "magicpin data", {
+        "bad": ("Demand is softer right now — a small, visible offer keeps you in front of the customers still searching.", "Abhi demand thoda kam hai — ek chhota, dikhne wala offer aapko search karne walon ke saamne rakhta hai.",
+                "add a small offer to your profile", "Profile pe ek chhota offer add kar doon?"),
+        "neutral": ("Catching demand early turns searches into calls.", "Demand jaldi pakadne se searches calls mein badalti hain.",
+                    "add a matching offer to your profile with a short post", "Profile pe ek matching offer + chhota post add kar doon?"),
+        "good": ("Catching this demand early turns searches into calls.", "Yeh demand jaldi pakadne se searches calls mein badalti hain.",
+                 "add a matching offer to your profile with a short post", "Profile pe ek matching offer + chhota post add kar doon?")}),
+    (r"price|cost|rent|gst|tax|fee|commission|payment|payout|settlement|invoice|wallet", "{m}'s account", "{m} ka account", "magicpin account", {
+        "bad": ("Worth a one-minute look so it doesn't cost you more than it should.", "Ek minute dekh lijiye taaki zaroorat se zyada kharcha na ho.",
+                "send a simple 3-line summary of what changes and what to do", "Kya badla aur kya karna hai — 3-line summary bhej doon?"),
+        "neutral": ("Worth a one-minute look so nothing surprises you later.", "Ek minute dekh lijiye taaki baad mein koi surprise na ho.",
+                    "send a simple 3-line summary of what changes for you", "Aapke liye kya badla, uska 3-line summary bhej doon?"),
+        "good": ("Good to know — a quick look confirms everything matches your records.", "Achha hai — ek nazar se confirm ho jaayega ki sab aapke records se match karta hai.",
+                 "send a simple 3-line summary", "Ek simple 3-line summary bhej doon?")}),
+    (r"stock|inventory|expir|batch|restock", "{m}'s stock", "{m} ka stock", "stock alert", {
+        "bad": ("Sorting it before the weekend avoids turning customers away.", "Weekend se pehle sort karne se customers wapas nahi jaate.",
+                "draft a quick reorder list", "Ek quick reorder list draft kar doon?"),
+        "neutral": ("Worth a quick look before the weekend rush.", "Weekend rush se pehle ek nazar dekh lijiye.",
+                    "draft a quick reorder list", "Ek quick reorder list draft kar doon?"),
+        "good": ("Worth telling the customers who were asking for it.", "Jo customers pooch rahe the, unhe bata dena chahiye.",
+                 "draft a 'back in stock' WhatsApp for your regulars", "Regulars ke liye 'back in stock' WhatsApp draft kar doon?")}),
+]
+READER_DEFAULT = ("{m}", "{m}", "magicpin alert", {
+    "bad": ("Worth sorting today, before it reaches your customers.", "Aaj hi sort karna sahi rahega, customers tak pahunchne se pehle.",
+            "draft the one message I'd send to handle this", "Ise handle karne ke liye ek message draft kar doon?"),
+    "neutral": ("", "", "draft the one message I'd send about this", "Is par bhejne layak ek message draft kar doon?"),
+    "good": ("A good moment to make the most of it.", "Iska poora fayda uthane ka achha mauka hai.",
+             "draft a short post to share the news", "Khabar share karne ke liye ek chhota post draft kar doon?")})
+_KEY_CACHE: dict = {}
+
+
+def _data_keys(p: dict) -> set:
+    return {k for k, v in (p or {}).items() if k not in SKIP_KEYS and not k.endswith("_id") and v not in (None, "", [], {}) and v is not False}
+
+
+def _handler_keys(kind: str) -> set:
+    """Payload keys a known handler actually reads (read from its source, so it stays correct as handlers change)."""
+    if kind not in _KEY_CACHE:
+        import inspect
+        try:
+            src = inspect.getsource(HANDLERS[kind])
+        except (OSError, TypeError, KeyError):
+            src = ""
+        _KEY_CACHE[kind] = set(re.findall(r"""(?:p|payload)(?:\.get\(|\[)["'](\w+)["']""", src))
+    return _KEY_CACHE[kind]
+
+
+NAME_KEYS = {"customer_name", "patient_name", "member_name", "name"}
+
+
+def resolve_alias(kind: str, payload: dict):
+    """Nearest known kind for an unknown trigger — only if that handler reads ALL of the trigger's data fields
+    (otherwise it would drop the new facts, which is exactly what the reader is for)."""
+    k = (kind or "").lower()
+    keys = _data_keys(payload) - NAME_KEYS
+    for target, pat in ALIASES:
+        if target in HANDLERS and re.search(pat, k):
+            return target if keys and keys <= _handler_keys(target) else None
+    return None
+
+
+UNITS = [(r"_(pct|percent)$", "%"), (r"_mm$", " mm"), (r"_(days|d)$", " days"), (r"_(hours|hrs|h)$", " hours"), (r"_km$", " km"),
+         (r"_(c|celsius)$", "°C"), (r"_(inr|rs|rupees)$", "")]
+LABEL_FIX = {"delta": "Change", "delta pct": "Change", "change": "Change", "window": "Window", "items": "Items"}
+
+
+def _reader_facts(p: dict, limit: int = 3) -> list[str]:
+    """Readable bullets from an unknown payload: keeps decimals (4.6 stays 4.6), units from key names, from/to pairs as a→b."""
+    out, used = [], set()
+    for k, v in p.items():
+        m = re.match(r"(from|old|previous|before)_(\w+)$", k)
+        if m:
+            for pre in ("to", "new", "current", "after"):
+                k2 = f"{pre}_{m.group(2)}"
+                if k2 in p and isinstance(v, (int, float)) and isinstance(p[k2], (int, float)):
+                    base, unit = m.group(2), ""
+                    for pat, u in UNITS:
+                        if re.search(pat, base):
+                            base, unit = re.sub(pat, "", base), u
+                            break
+                    out.append(f"{humanize(base).capitalize()}: {v:g}{unit} → {p[k2]:g}{unit}")
+                    used |= {k, k2}
+    for k, v in p.items():
+        if k in used or k in SKIP_KEYS or k in NAME_KEYS or k.endswith("_id") or k in TEXT_KEYS or isinstance(v, bool):
+            continue
+        unit, base = "", k
+        for pat, u in UNITS:
+            if re.search(pat, k):
+                unit, base = u, re.sub(pat, "", k)
+                break
+        if isinstance(v, (int, float)):
+            val = (f"{v:+g}%" if unit == "%" and re.search(r"delta|change|hike|drop|rise|up|down", k) else f"{v:g}{unit}")
+            if re.search(r"_(inr|rs|rupees)$|price|amount|fee|cost", k):
+                val = inr(v)
+        elif isinstance(v, str) and re.search(r"\d", v) and not re.match(r"\d{4}-\d{2}-\d{2}", v):
+            val = v.strip()   # keep '26-28 April' as written
+        else:
+            val = _fmt_val(k, v)
+        if not val:
+            continue
+        label = humanize(re.sub(r"_iso$", "", base)).strip()
+        label = LABEL_FIX.get(label.lower(), label.capitalize())
+        out.append(f"{label}: {val}")
+    return out[:limit]
+
+
+def h_reader(c: Ctx) -> Draft:
+    """Unknown trigger kind with real data. Step 1: rate it (good/bad news, how strong). Step 2: the rating picks the
+    opener, tone and action template; the family (reviews, slots, ...) picks the subject and source. Facts come from the trigger."""
+    p = c.payload
+    fam = next((f[1:] for f in READER if re.search(f[0], c.kind.lower())), READER_DEFAULT)
+    subj_en, subj_hi, src, tpl = fam
+    quote = next((str(p[k]).strip() for k in TEXT_KEYS if isinstance(p.get(k), str) and len(p[k].strip()) >= 12), "")
+    facts = _reader_facts(p)
+    if not facts and not quote:
+        return Draft("", skip=True, rationale=f"New trigger type '{c.kind}' with no readable data — skipped (R2, restraint).")
+    rating, why = rate_trigger(c.kind, p, quote)
+    mood = "bad" if rating < 0 else "good" if rating > 0 else "neutral"
+    if mood == "bad" and not quote and "bad_noquote" in tpl:
+        mood = "bad_noquote"
+    line_en, line_hi, cta_en, cta_hi = tpl.get(mood) or tpl["neutral"]
+    open_en, open_hi, emoji, tone = TONE[rating]
+    loc = c.locality or c.city or L(c.lang, "your area", "aapke area")
+    fmt = dict(m=c.mname, loc=loc)
+    em = f" {emoji}" if emoji else ""
+    head = L(c.lang, f"{c.sal}, {open_en}{em} — {subj_en.format(**fmt)} ({src}):", f"{c.sal}, {open_hi}{em} — {subj_hi.format(**fmt)} ({src}):")
+    qline = ("> “" + (quote[:157] + "…" if len(quote) > 160 else quote) + "”") if quote else ""
+    base_line = L(c.lang, line_en, line_hi)
+
+    def render(ai):
+        line = (ai or {}).get("line", "").strip() or base_line
+        return "\n".join(x for x in [head, bullets(facts), qline, line, yes(c.lang, cta_en, cta_hi)] if x)
+    f = c.base_facts() | {"trigger_facts": facts, "trigger_text": quote, "news_rating": rating}
+    task = AITask("line", f"A new kind of update arrived for this {SINGULAR.get(c.slug, 'business')} (trigger_facts / trigger_text). "
+                  f"It is rated {rating:+d} on a -2 (needs attention today) to +2 (great news) scale. Tone: {tone}. "
+                  "Write ONE short sentence on what it means for THIS merchant and why acting today helps, using only their real data. "
+                  "No numbers, no promises, no emoji.", no_numbers=True, priority=2)
+    return Draft(render(None), facts=f, offer=cta_en, ai=task, render=render, followup={"type": "reader_action", "action": cta_en},
+                 rationale=f"New trigger type '{c.kind}' rated {rating:+d} ({', '.join(why) or 'no good/bad signal'}): "
+                           f"tone '{tone.split(',')[0]}', trigger's own facts (code), one AI line, one concrete action.",
+                 template_params=[c.sal, c.mname])
 
 
 # =============================================================== routing
@@ -1160,18 +1781,32 @@ def draft_for(category, merchant, trigger, customer=None, universe=None, rotatio
         # #30: rotate through approved formats; placeholder payload so empty-trigger variants are used
         for step in range(len(ROTATION)):
             k = ROTATION[(rotation_index + step) % len(ROTATION)]
-            c2 = Ctx(category, merchant, {**trigger, "kind": k, "payload": {"placeholder": True}}, customer, universe, now)
+            c2 = Ctx(category, merchant, {**trigger, "kind": k, "payload": {"placeholder": True, "rotation": True}}, customer, universe, now)
             d = HANDLERS[k](c2)
             if not d.skip:
                 d.rationale = f"Scheduled check-in, rotation format '{k}': " + d.rationale
                 return _clean(d)
         return Draft("", skip=True, rationale="Scheduled check-in: no format has data for this merchant.")
+    if kind not in HANDLERS:  # new trigger kind (decision, round 4)
+        target = resolve_alias(kind, c.payload)
+        if target:
+            d = draft_for(category, merchant, {**trigger, "kind": target}, customer, universe, rotation_index, now)
+            d.rationale = f"New trigger type '{kind}' read as '{target}': " + d.rationale
+            return d
+        if not _data_keys(c.payload):
+            return Draft("", skip=True, rationale=f"New trigger type '{kind}' with no data — skipped (R2, restraint).")
+    dis, _i, _o = fit(kind, c.slug)
+    if dis >= 2:
+        return Draft("", skip=True, rationale=f"Trigger type doesn't fit a {SINGULAR.get(c.slug, 'this')} business (dissociation {dis}/3) — skipped (restraint).")
     if (trigger.get("scope") == "customer" or kind in CUSTOMER_KINDS) and not customer:
-        what = {"recall_due": ("may be due for their next visit", "ka next visit due ho sakta hai")}.get(kind, (f"has a '{humanize(kind)}' update", f"ka '{humanize(kind)}' update hai"))
+        d = _merchant_approval(category, merchant, trigger, universe, now, c)
+        if d:
+            return _clean(d)
+        what = {"recall_due": ("may be due for their next visit", "ka next visit due ho sakta hai")}.get(kind, ASK_WHAT.get(kind, ("may be worth a personal follow-up", "ko ek personal follow-up bhejna sahi rahega")))
         return _clean(ask_merchant(c, *what))
     handler = HANDLERS.get(kind)
     try:
-        d = handler(c) if handler else h_local_news(c) if any(k in c.payload for k in ("headline", "title", "summary", "event")) else h_generic(c)
+        d = handler(c) if handler else h_reader(c)
     except Exception as e:  # never crash a send on odd data
         d = h_generic(c)
         d.rationale += f" (fallback after {type(e).__name__}: {e})"

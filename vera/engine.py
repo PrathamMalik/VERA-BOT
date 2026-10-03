@@ -121,6 +121,8 @@ def tick(body: dict):
         if kind == "scheduled_recurring" and _recently_in_touch(merchant, now):
             STORE.considered.add(sk)
             continue
+        if flags.get("tagline"):
+            merchant = {**merchant, "_tagline": flags["tagline"]}
         d = draft_for(STORE.category_for(merchant) or {}, merchant, trg, customer, universe=universe,
                       rotation_index=STORE.rotation[mid], now=now)
         if d.skip and not (d.ai and d.ai.kind == "relevance" and llm.enabled()):

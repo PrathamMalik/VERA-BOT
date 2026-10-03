@@ -42,6 +42,12 @@ class Store:
                     return False, cur["version"]
                 if version == cur["version"]:
                     return True, cur["version"]  # idempotent re-post
+            if scope == "category" and cur is not None and isinstance(payload, dict):
+                # mid-test context injection: mark research items that are new in this version (decision: newest relevant, with floor)
+                old_ids = {d.get("id") for d in (cur["payload"].get("digest") or []) if isinstance(d, dict)}
+                for d in payload.get("digest") or []:
+                    if isinstance(d, dict) and d.get("id") not in old_ids:
+                        d["_new"] = True
             self.contexts[key] = {"version": version, "payload": payload}
             return True, version
 

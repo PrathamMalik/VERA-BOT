@@ -13,6 +13,7 @@ from . import llm
 from .templates import draft_for, Ctx
 from .util import customer_first, owner_first
 from .validator import check
+from .quality import floor_check
 
 VOICE = {
     "dentists": "clinical peer-to-peer (colleague, not salesperson), address as 'Dr. <name>', technical terms welcome, no hype",
@@ -38,6 +39,10 @@ TASK_FORMAT = {
     "relevance": 'Return {"relevant": true|false, "line": "<1-2 sentences if relevant, else empty>"}',
     "label": 'Return {"label": "<one of the options>"}',
 }
+
+COACH_LINES = ["Coach's note: one focused move this week beats five half-done ones 💪",
+               "Coach's note: consistency wins — small fix now, stronger month ahead 💪",
+               "Coach's note: treat this like a training split — one clear target this week 💪"]
 
 _cache: dict[str, dict] = {}
 _cache_lock = threading.Lock()
@@ -111,6 +116,23 @@ def compose(category: dict, merchant: dict, trigger: dict, customer: dict | None
         note = "rules-only (no AI key)"
     if d.ai and d.ai.kind == "relevance" and source == "rules":
         d.skip, body = True, ""
+    # gym voice layer (category voice: energetic_disciplined, coach register) — merchant-facing only, no promises
+    if body and not d.skip and c.slug == "gyms" and d.send_as == "vera" and "\n> " not in body:
+        lines = body.split("\n")
+        coach = COACH_LINES[sum(map(ord, merchant.get("merchant_id", ""))) % len(COACH_LINES)]
+        if any(ord(ch) > 0x2600 for ch in body):  # keep to one emoji per message
+            coach = coach.replace(" 💪", "")
+        if len(lines) > 1 and coach not in body:
+            body = "\n".join(lines[:-1] + [coach, lines[-1]])
+    # quality floor (decision, eval round 1): AI/hybrid text that fails falls back to the rules text; rules text that fails -> skip
+    floor = floor_check(body, merchant, trigger, customer, d.send_as) if body and not d.skip else []
+    if floor and source != "rules" and d.body:
+        body, source = d.body, "rules"
+        note = (note + "; " if note else "") + f"AI text failed floor ({', '.join(floor)})"
+        floor = floor_check(body, merchant, trigger, customer, d.send_as)
+    if floor and not d.skip:
+        d.skip, body = True, ""
+        rationale = f"Skipped: message failed the quality floor ({', '.join(floor)}) — restraint over a weak send."
     if body and prefix:
         body = f"{prefix}\n{body}"
     kind = trigger.get("kind", "generic")
