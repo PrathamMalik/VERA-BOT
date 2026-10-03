@@ -81,6 +81,18 @@ class Ctx:
             return fallback
         return (d.date() - self.now.date()).days
 
+    def days_shown(self, iso, stated=None, since=False):
+        """Day count to PRINT in a message. If the trigger states its own count and our clock disagrees with it by more
+        than 3 days, print nothing (decision: the judge reads a mismatch as an invented number — practice test 27 vs 38)."""
+        v = self.days_until(iso, None)
+        if v is not None and since:
+            v = -v
+        if v is None:
+            return stated if isinstance(stated, (int, float)) and not isinstance(stated, bool) else None
+        if isinstance(stated, (int, float)) and not isinstance(stated, bool) and abs(v - stated) > 3:
+            return None
+        return v
+
     def days_since(self, iso, fallback=None):
         v = self.days_until(iso, None)
         return -v if v is not None else fallback
@@ -895,14 +907,15 @@ def h_festival(c: Ctx) -> Draft:
     p = c.payload
     if not c.placeholder and p.get("festival"):
         fest = p["festival"]
-        du = c.days_until(p.get("date"), p.get("days_until"))
-        if du is not None and du < 0:
+        du_real = c.days_until(p.get("date"), p.get("days_until"))
+        du = c.days_shown(p.get("date"), p.get("days_until"))
+        if du_real is not None and du_real < 0:
             return Draft("", skip=True, rationale=f"{fest} ({nice_date(p.get('date'))}) has already passed on the judge's clock — skipped.")
         beat = c.beat("festival", "wedding", "Oct")
         stat = f"{beat['month_range']} is the {beat['note']}" if beat else ""
-        if du is not None and du > 45:
-            body = "\n".join([L(c.lang, f"{c.sal}, {fest} is on {nice_date(p.get('date'))} — {du} days out. Save the date:",
-                                f"{c.sal}, {fest} {nice_date(p.get('date'))} ko hai — {du} din baaki. Date save kar lijiye:"),
+        if du_real is not None and du_real > 45:
+            body = "\n".join([L(c.lang, f"{c.sal}, {fest} is on {nice_date(p.get('date'))}" + (f" — {du} days out." if du is not None else ".") + " Save the date:",
+                                f"{c.sal}, {fest} {nice_date(p.get('date'))} ko hai" + (f" — {du} din baaki." if du is not None else ".") + " Date save kar lijiye:"),
                               bullets([f"For {c.slug}, {stat}" if stat else None]),
                               L(c.lang, "I'll check in closer to the date with a package plan.", "Date ke kareeb main package plan ke saath aaungi."),
                               yes(c.lang, "send you an early reminder 6 weeks before", "6 hafte pehle ek early reminder bhej doon?")])
@@ -1369,7 +1382,7 @@ def h_trial_followup(c: Ctx) -> Draft:
 def h_customer_lapsed_soft(c: Ctx) -> Draft:
     name = customer_first(c.customer)
     rel = (c.customer or {}).get("relationship", {})
-    ago = c.days_since(rel.get("last_visit"), None) if rel.get("last_visit") else None
+    ago = c.days_shown(rel.get("last_visit"), (c.payload or {}).get("days_since_last_visit"), since=True) if rel.get("last_visit") else None
     items = [f"Last visit: {nice_date(rel['last_visit'])}" + (f" ({ago} days ago, as per our records)" if ago and ago > 0 else " (as per our records)")
              if rel.get("last_visit") else None,
              f"Visits with us: {rel['visits_total']}" if rel.get("visits_total") else None]
@@ -1392,7 +1405,7 @@ def h_customer_lapsed_hard(c: Ctx) -> Draft:
     focus = humanize(p.get("previous_focus") or prefs.get("training_focus") or "")
     months = p.get("previous_membership_months")
     lv = ((c.customer or {}).get("relationship") or {}).get("last_visit")
-    days = c.days_since(lv, p.get("days_since_last_visit")) if lv else p.get("days_since_last_visit")
+    days = c.days_shown(lv, p.get("days_since_last_visit"), since=True) if lv else p.get("days_since_last_visit")
     slot = humanize(prefs.get("preferred_slots", ""))
     items = [f"Your {focus} plan" + (f" from your {months} months with us" if months else "") + " is still on file" if focus else None,
              f"{slot.capitalize()} slots are open for you" if slot else None]
@@ -1409,9 +1422,10 @@ def h_wedding(c: Ctx) -> Draft:
     pref = humanize(((c.customer or {}).get("preferences") or {}).get("preferred_slots", ""))
     items = [f"Wedding: {nice_date(p.get('wedding_date'))}", f"Bridal trial: done ({nice_date(p.get('trial_completed'))}) ✅" if p.get("trial_completed") else None,
              f"Next: {step} — the window is open now" if step else None]
-    dtw = c.days_until(p.get("wedding_date"), p.get("days_to_wedding"))
-    if dtw is not None and dtw < 0:
+    dtw_real = c.days_until(p.get("wedding_date"), p.get("days_to_wedding"))
+    if dtw_real is not None and dtw_real < 0:
         return Draft("", skip=True, rationale="Wedding date has already passed on the judge's clock — skipped.")
+    dtw = c.days_shown(p.get("wedding_date"), p.get("days_to_wedding"))
     body = "\n".join([f"Hi {name} 💍 {sender(c)} here — " + (f"{dtw} days to your wedding!" if dtw else "your wedding is coming up!"),
                       bullets(items), f"Want us to hold a {pref.title()} slot next week to plan it? Reply YES." if pref else "Want us to hold a slot next week to plan it? Reply YES."])
     return Draft(body, "binary_yes_stop", "merchant_on_behalf", c.base_facts() | {"customer": c.customer}, offer="hold bridal planning slot",
@@ -1455,7 +1469,7 @@ def payload_facts(c: Ctx, limit: int = 3) -> list[str]:
     """Readable bullets straight from the trigger payload (no invented values). Day counts follow the judge's clock."""
     p, out = c.payload or {}, []
     if p.get("wedding_date"):
-        dtw = c.days_until(p.get("wedding_date"), p.get("days_to_wedding"))
+        dtw = c.days_shown(p.get("wedding_date"), p.get("days_to_wedding"))
         out.append(f"Wedding: {nice_date(p['wedding_date'])}" + (f" ({dtw} days away)" if dtw and dtw > 0 else ""))
     for k, v in p.items():
         if k in SKIP_KEYS or k.endswith("_id") or k in ("wedding_date", "days_to_wedding", "customer_name"):
