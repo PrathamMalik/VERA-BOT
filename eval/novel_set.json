@@ -1,0 +1,4631 @@
+{
+  "now": "2026-04-26T10:30:00Z",
+  "note": "Novel blind set: 30 triggers with kinds not in the known list (merchant, customer, near-name variants, empty placeholders). Merchants/customers/categories copied from fresh_set.json.",
+  "categories": {
+    "gyms": {
+      "slug": "gyms",
+      "display_name": "Gyms & Fitness",
+      "voice": {
+        "tone": "energetic_disciplined",
+        "register": "coach_to_member",
+        "code_mix": "english_primary_some_hindi",
+        "vocab_allowed": [
+          "footfall",
+          "membership churn",
+          "PT sessions",
+          "PR (personal record)",
+          "1RM",
+          "EMOM",
+          "AMRAP",
+          "split",
+          "cut",
+          "bulk",
+          "BMR",
+          "VO2max",
+          "functional",
+          "HIIT",
+          "CrossFit",
+          "yoga",
+          "pilates"
+        ],
+        "vocab_taboo": [
+          "guaranteed weight loss",
+          "shred in 7 days",
+          "miracle transformation",
+          "fastest results"
+        ],
+        "salutation_examples": [
+          "Hi {first_name}",
+          "{gym_name} team",
+          "Coach"
+        ],
+        "tone_examples": [
+          "Quick check — your weekday 7-9pm slot has been at 90%+ capacity all month",
+          "Footfall pattern: April drop-off is normal; bookings recover by 2nd week May"
+        ]
+      },
+      "offer_catalog": [
+        {
+          "id": "gym_001",
+          "title": "3 FREE Trial Classes",
+          "value": "0",
+          "audience": "new_user",
+          "type": "free_trial"
+        },
+        {
+          "id": "gym_002",
+          "title": "First Month @ ₹499",
+          "value": "499",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "gym_003",
+          "title": "Personal Training Demo @ ₹199",
+          "value": "199",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "gym_004",
+          "title": "Annual Membership @ ₹14,999 (save ₹6,000)",
+          "value": "14999",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "gym_005",
+          "title": "Couple/Family Plan @ ₹999/month",
+          "value": "999",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "gym_006",
+          "title": "Free Body Composition Analysis",
+          "value": "0",
+          "audience": "all",
+          "type": "free_service"
+        },
+        {
+          "id": "gym_007",
+          "title": "Refer-a-friend: 1 month free for both",
+          "value": "free_addon",
+          "audience": "repeat_user",
+          "type": "free_addon"
+        },
+        {
+          "id": "gym_008",
+          "title": "Yoga + Strength Combo @ ₹1,499/month",
+          "value": "1499",
+          "audience": "new_user",
+          "type": "service_at_price"
+        }
+      ],
+      "peer_stats": {
+        "scope": "metro_neighbourhood_gyms_2026",
+        "avg_rating": 4.5,
+        "avg_review_count": 56,
+        "avg_views_30d": 1100,
+        "avg_calls_30d": 18,
+        "avg_directions_30d": 42,
+        "avg_ctr": 0.045,
+        "avg_photos": 16,
+        "avg_post_freq_days": 12,
+        "monthly_churn_pct": 0.08,
+        "trial_to_paid_pct": 0.32
+      },
+      "digest": [
+        {
+          "id": "d_2026W17_resolution_window",
+          "kind": "seasonal",
+          "title": "Post-Jan resolution window closing — last 2 weeks of high trial-walk-ins",
+          "source": "magicpin gym data, Apr 2026",
+          "summary": "Gym trial walk-ins spike Jan 1-15, taper through Mar; April-June hits the lowest acquisition window of the year. Most gyms over-spend on ads now; underspend in October pre-holiday window.",
+          "actionable": "Pause acquisition spend in May; double down Sept-Oct"
+        },
+        {
+          "id": "d_2026W17_pt_demand",
+          "kind": "trend",
+          "title": "Personal Training inquiries +38% YoY in 30-50 corporate cohort",
+          "source": "Multi-gym aggregate Apr 2026",
+          "summary": "Driven by health-check-up findings (rising HbA1c, BP, cholesterol). Demand is for 2x/week PT, not full-program. ₹3,000-5,000/month sweet spot.",
+          "actionable": "Package a '2x/week PT @ ₹3,499' option separate from full membership"
+        },
+        {
+          "id": "d_2026W17_yoga_studio_competition",
+          "kind": "compete",
+          "title": "Boutique yoga/pilates studios opening fast in metro neighbourhoods",
+          "source": "Industry watch Apr 2026",
+          "summary": "Reformer pilates studios at ₹6,000-8,000/month membership are pulling 30-45 women from traditional gyms. Don't compete on price; compete on coach quality + community.",
+          "actionable": "Add one yoga or pilates class to your weekly schedule if you don't have one"
+        },
+        {
+          "id": "d_2026W17_creatine_safety_bulletin",
+          "kind": "research",
+          "title": "ICMR creatine supplementation safety bulletin — adolescent guidance",
+          "source": "ICMR, Apr 2026",
+          "summary": "Creatine monohydrate at 3-5g/day deemed safe for healthy adults; cautioned against under-18 use without medical supervision. Reinforces what most coaches already practice.",
+          "actionable": "Update your store / counter recommendations; flag under-18 customers"
+        },
+        {
+          "id": "d_2026W17_class_schedule_optimization",
+          "kind": "tech",
+          "title": "Schedule density study — peak slots underutilized in mornings",
+          "source": "magicpin internal Apr 2026",
+          "summary": "Across 200+ partner gyms, 6-8am weekday slots run at 60% capacity vs 90%+ for 6-9pm. Adding a 7am class typically doesn't cannibalize evenings.",
+          "actionable": "Consider one new 7am class — yoga or HIIT pulls best in that slot"
+        }
+      ],
+      "patient_content_library": [
+        {
+          "id": "pc_first_30_days",
+          "title": "First 30 days at the gym — what actually changes",
+          "channel": "whatsapp",
+          "length_seconds": 60,
+          "body": "Week 1-2: nervous-system adaptation, lifts feel easier (not muscle gain — coordination). Week 3-4: small visible changes, sleep improves. Real strength/aesthetic changes start at week 8-12. Most people quit at week 3 expecting visible change. Trust the process."
+        },
+        {
+          "id": "pc_pt_or_solo",
+          "title": "PT or solo? A 5-question test",
+          "channel": "whatsapp",
+          "length_seconds": 45,
+          "body": "Solo if: you've trained before, you can read program structure, you don't get injured easily. PT if: you're new, recovering from injury, training for a specific event, or have inconsistent form. Hybrid (PT 1-2x/month + solo): the smartest middle path for most members."
+        },
+        {
+          "id": "pc_protein_basics",
+          "title": "How much protein do you actually need?",
+          "channel": "whatsapp",
+          "length_seconds": 50,
+          "body": "Sedentary adults: 0.8g/kg body weight. Active adults: 1.2-1.6g/kg. Strength training: 1.6-2.2g/kg. For a 70kg active person, that's 84-112g/day — roughly 4 fistful-portions of protein. Indian-veg diets often fall short; supplement with paneer, dal, tofu before adding powders."
+        }
+      ],
+      "seasonal_beats": [
+        {
+          "month_range": "Jan",
+          "note": "resolution surge — trial walk-ins 4x baseline; convert window"
+        },
+        {
+          "month_range": "Apr-Jun",
+          "note": "lowest acquisition window — focus on retention, not acquisition"
+        },
+        {
+          "month_range": "Aug-Oct",
+          "note": "wedding-prep + festival window — repeat clients return to shape up"
+        },
+        {
+          "month_range": "Nov-Dec",
+          "note": "holiday slowdown — class density drops 25%; right time to renovate or pilot new programs"
+        }
+      ],
+      "trend_signals": [
+        {
+          "query": "gym near me",
+          "delta_yoy": 0.05,
+          "segment_age": "all",
+          "skew": "balanced"
+        },
+        {
+          "query": "personal trainer cost",
+          "delta_yoy": 0.38,
+          "segment_age": "30-50",
+          "skew": "balanced"
+        },
+        {
+          "query": "yoga classes near me",
+          "delta_yoy": 0.42,
+          "segment_age": "25-55",
+          "skew": "female"
+        },
+        {
+          "query": "weight loss program",
+          "delta_yoy": 0.28,
+          "segment_age": "30-50",
+          "skew": "female"
+        }
+      ],
+      "regulatory_authorities": [
+        "FSSAI (for supplement sales)",
+        "Local Municipal Corp (premises)"
+      ],
+      "professional_journals": [
+        "Indian Journal of Sports Medicine"
+      ]
+    },
+    "dentists": {
+      "slug": "dentists",
+      "display_name": "Dentists",
+      "voice": {
+        "tone": "peer_clinical",
+        "register": "respectful_collegial",
+        "code_mix": "hindi_english_natural",
+        "vocab_allowed": [
+          "fluoride varnish",
+          "scaling",
+          "caries",
+          "occlusion",
+          "bruxism",
+          "endodontic",
+          "periodontal",
+          "implant",
+          "aligner",
+          "veneer",
+          "OPG",
+          "IOPA",
+          "RCT",
+          "CAD/CAM",
+          "zirconia",
+          "PFM"
+        ],
+        "vocab_taboo": [
+          "guaranteed",
+          "100% safe",
+          "completely cure",
+          "miracle",
+          "best in city",
+          "doctor approved",
+          "FDA-approved (use only when actually applicable)"
+        ],
+        "salutation_examples": [
+          "Dr. {first_name}",
+          "Doc"
+        ],
+        "tone_examples": [
+          "Worth a look — JIDA Oct 2026 p.14",
+          "This one likely affects your high-risk adult cohort",
+          "If your case-mix is mostly cosmetic, may not be relevant"
+        ]
+      },
+      "offer_catalog": [
+        {
+          "id": "den_001",
+          "title": "Dental Cleaning @ ₹299",
+          "value": "299",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "den_002",
+          "title": "Free Consultation",
+          "value": "0",
+          "audience": "new_user",
+          "type": "free_service"
+        },
+        {
+          "id": "den_003",
+          "title": "Teeth Whitening @ ₹1,499",
+          "value": "1499",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "den_004",
+          "title": "Root Canal @ ₹2,999 (single rooted)",
+          "value": "2999",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "den_005",
+          "title": "Free Smile Analysis + Digital Scan",
+          "value": "0",
+          "audience": "new_user",
+          "type": "free_service"
+        },
+        {
+          "id": "den_006",
+          "title": "Aligner Consultation @ ₹499",
+          "value": "499",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "den_007",
+          "title": "Pediatric Dental Checkup @ ₹199",
+          "value": "199",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "den_008",
+          "title": "Annual Family Dental Plan @ ₹4,999",
+          "value": "4999",
+          "audience": "repeat_user",
+          "type": "membership"
+        }
+      ],
+      "peer_stats": {
+        "scope": "metro_solo_practices_2026",
+        "avg_rating": 4.4,
+        "avg_review_count": 62,
+        "avg_views_30d": 1820,
+        "avg_calls_30d": 12,
+        "avg_directions_30d": 38,
+        "avg_ctr": 0.03,
+        "avg_photos": 9,
+        "avg_post_freq_days": 14,
+        "retention_6mo_pct": 0.42
+      },
+      "digest": [
+        {
+          "id": "d_2026W17_jida_fluoride",
+          "kind": "research",
+          "title": "3-month fluoride varnish recall outperforms 6-month for high-risk adult caries",
+          "source": "JIDA Oct 2026, p.14",
+          "trial_n": 2100,
+          "patient_segment": "high_risk_adults",
+          "summary": "Multi-center Indian trial shows 38% lower caries recurrence with 3-month vs 6-month recall in adults with active decay history. No effect in low-risk patients.",
+          "actionable": "Reassess recall interval for adults flagged high-risk in your charting"
+        },
+        {
+          "id": "d_2026W17_dci_radiograph",
+          "kind": "compliance",
+          "title": "DCI revised radiograph dose limits effective 2026-12-15",
+          "source": "Dental Council of India circular 2026-11-04",
+          "summary": "Maximum dose per IOPA exposure drops from 1.5 mSv to 1.0 mSv. E-speed film passes at the new limit; D-speed does not. Digital RVG sensors unaffected.",
+          "actionable": "Audit your X-ray setup before Dec 15; document E-speed or RVG in your SOPs"
+        },
+        {
+          "id": "d_2026W17_ida_webinar",
+          "kind": "cde",
+          "title": "IDA Delhi: Digital impressions — 2026 state of the art",
+          "source": "IDA Delhi chapter calendar",
+          "date": "2026-05-02T19:00:00+05:30",
+          "credits": 2,
+          "summary": "Speaker: Dr. R. Mehta. Covers Primescan 2, Trios 5, and CAD/CAM workflow ROI for solo practices.",
+          "actionable": "Free for IDA members; ₹500 for non-members"
+        },
+        {
+          "id": "d_2026W17_aligner_trend",
+          "kind": "trend",
+          "title": "Clear aligner consultations searches +62% YoY in metros",
+          "source": "Practo + Google Trends, Apr 2026",
+          "summary": "'Clear aligners near me' query growth concentrated in 28-45 age band; female-skewed. Pricing pressure as DIY aligner brands hit the market.",
+          "actionable": "Position your supervised-aligner offer against DIY in your GBP description"
+        },
+        {
+          "id": "d_2026W17_e_max_press",
+          "kind": "tech",
+          "title": "Dentsply launches IPS e.max Press for zirconia crowns in India at ₹3,200/unit (Delhi labs)",
+          "source": "Dentsply India launch note 2026-04-18",
+          "summary": "Better aesthetic, similar fracture resistance to standard zirconia. Two Delhi labs (Dental Direkt, Siam Dental) confirmed stocking. Shared-lease scanner deals available.",
+          "actionable": "Worth comparing if crown work is >15% of monthly revenue"
+        }
+      ],
+      "patient_content_library": [
+        {
+          "id": "pc_oral_heart",
+          "title": "3 things your teeth tell you about your heart",
+          "channel": "whatsapp",
+          "length_seconds": 90,
+          "body": "Periodontal disease shares inflammation pathways with cardiovascular disease. Bleeding gums, persistent bad breath, and loose teeth in middle age are early signals. A 2024 meta-analysis of 18 studies found periodontal patients had 22% higher CVD events. The simplest action: scaling every 6 months reduces both gum and inflammation markers."
+        },
+        {
+          "id": "pc_kid_brushing",
+          "title": "Why your child resists brushing — and what to try this week",
+          "channel": "whatsapp",
+          "length_seconds": 60,
+          "body": "Most resistance under age 7 is sensory, not behavioural. Try: (1) a softer brush than you think necessary, (2) brushing in front of a mirror so they see what's happening, (3) two minutes of music as the timer. If resistance persists past 4 weeks, it's worth a pediatric dental consult."
+        },
+        {
+          "id": "pc_aligner_vs_braces",
+          "title": "Aligners or braces? What I tell my patients in their 30s",
+          "channel": "whatsapp",
+          "length_seconds": 75,
+          "body": "Aligners work for ~70% of cases — mild-to-moderate crowding, spacing, and minor rotations. Braces still win for severe rotations, deep bites, and skeletal corrections. The tell: if you can't keep aligners on for 22 hours/day, braces are the safer choice."
+        }
+      ],
+      "seasonal_beats": [
+        {
+          "month_range": "Nov-Feb",
+          "note": "exam-stress bruxism spike — ortho consults rise 30% in 18-24 cohort"
+        },
+        {
+          "month_range": "Oct-Dec",
+          "note": "wedding whitening peak — bookings 2x baseline; ladies' segment dominant"
+        },
+        {
+          "month_range": "Jan",
+          "note": "new-year resolution surge — annual check-up bookings +40%"
+        },
+        {
+          "month_range": "Apr-Jun",
+          "note": "school holiday window — pediatric appointments +50%"
+        }
+      ],
+      "trend_signals": [
+        {
+          "query": "clear aligners delhi",
+          "delta_yoy": 0.62,
+          "segment_age": "28-45",
+          "skew": "female"
+        },
+        {
+          "query": "teeth whitening price",
+          "delta_yoy": 0.41,
+          "segment_age": "all",
+          "skew": "balanced"
+        },
+        {
+          "query": "dental implants near me",
+          "delta_yoy": 0.18,
+          "segment_age": "45-65",
+          "skew": "male"
+        },
+        {
+          "query": "kids first dental visit",
+          "delta_yoy": 0.27,
+          "segment_age": "parents_25-40",
+          "skew": "female"
+        }
+      ],
+      "regulatory_authorities": [
+        "Dental Council of India (DCI)",
+        "Indian Dental Association (IDA)"
+      ],
+      "professional_journals": [
+        "JIDA",
+        "Indian Journal of Dental Research",
+        "Dental Tribune India"
+      ]
+    },
+    "pharmacies": {
+      "slug": "pharmacies",
+      "display_name": "Pharmacies & Medical Stores",
+      "voice": {
+        "tone": "trustworthy_precise",
+        "register": "neighbourhood_pharmacist",
+        "code_mix": "hindi_english_natural",
+        "vocab_allowed": [
+          "OTC",
+          "schedule H",
+          "schedule X",
+          "generic",
+          "branded",
+          "molecule",
+          "MRP",
+          "expiry",
+          "batch",
+          "PCR retail",
+          "pharmacist counsel"
+        ],
+        "vocab_taboo": [
+          "miracle cure",
+          "guaranteed result",
+          "100% safe",
+          "doctor recommended (without disclosure)",
+          "best price (without supporting data)"
+        ],
+        "salutation_examples": [
+          "Hi {pharmacist_name}",
+          "{pharmacy_name} team"
+        ],
+        "tone_examples": [
+          "Quick check — your repeat-prescription customer count is up 18% this month",
+          "Heads up: a generic alternative for {molecule} just got approved — likely 30% lower MRP"
+        ]
+      },
+      "offer_catalog": [
+        {
+          "id": "phr_001",
+          "title": "Flat 20% OFF on medicines",
+          "value": "20%",
+          "audience": "new_user",
+          "type": "percentage_discount"
+        },
+        {
+          "id": "phr_002",
+          "title": "Free Home Delivery > ₹499",
+          "value": "free_delivery",
+          "audience": "new_user",
+          "type": "free_addon"
+        },
+        {
+          "id": "phr_003",
+          "title": "Annual Health Card @ ₹399 (15% off all year)",
+          "value": "399",
+          "audience": "repeat_user",
+          "type": "membership"
+        },
+        {
+          "id": "phr_004",
+          "title": "Free BP & Sugar Check",
+          "value": "0",
+          "audience": "all",
+          "type": "free_service"
+        },
+        {
+          "id": "phr_005",
+          "title": "Senior Citizen 15% OFF (60+ age)",
+          "value": "15%",
+          "audience": "senior",
+          "type": "percentage_discount"
+        },
+        {
+          "id": "phr_006",
+          "title": "Diabetic Care Combo: Glucometer + 50 strips @ ₹999",
+          "value": "999",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "phr_007",
+          "title": "Free Pharmacist Consultation (10 min)",
+          "value": "0",
+          "audience": "all",
+          "type": "free_service"
+        },
+        {
+          "id": "phr_008",
+          "title": "Subscription refill reminder + delivery (chronic Rx)",
+          "value": "0",
+          "audience": "repeat_user",
+          "type": "free_service"
+        }
+      ],
+      "peer_stats": {
+        "scope": "metro_neighbourhood_pharmacies_2026",
+        "avg_rating": 4.6,
+        "avg_review_count": 42,
+        "avg_views_30d": 1400,
+        "avg_calls_30d": 22,
+        "avg_directions_30d": 58,
+        "avg_ctr": 0.038,
+        "avg_photos": 6,
+        "avg_post_freq_days": 21,
+        "delivery_share_pct": 0.35,
+        "repeat_customer_pct": 0.62
+      },
+      "digest": [
+        {
+          "id": "d_2026W17_generic_metformin",
+          "kind": "supply",
+          "title": "Generic metformin SR price drop after 4 new approvals",
+          "source": "DGCI release Apr 2026",
+          "summary": "Three major Indian players got SR-formulation approval; wholesale price down 22% effective next month. Branded retail likely flat for now (margin will absorb).",
+          "actionable": "Audit your shelf — switching diabetic refills to generic now saves the patient ~₹120/month and improves your repeat-buy stickiness"
+        },
+        {
+          "id": "d_2026W17_schedule_h1_compliance",
+          "kind": "compliance",
+          "title": "FDA enforcement audit on Schedule H1 antibiotic dispensing — Q2",
+          "source": "FDA India inspector circular Apr 2026",
+          "summary": "Tighter Q2 audit cycle on H1 antibiotic dispensing — proper Rx capture, register entries, batch tracking. ₹50,000+ penalties for missing entries.",
+          "actionable": "Audit your H1 register; ensure pharmacist signature + Rx photocopy on file for every dispense in last 90 days"
+        },
+        {
+          "id": "d_2026W17_summer_demand",
+          "kind": "seasonal",
+          "title": "Summer demand shift: ORS, sunscreen, anti-fungal up 40%; cold/cough down 60%",
+          "source": "Multi-pharmacy aggregate Apr 2026",
+          "summary": "Standard April-Jun pattern: ORS sachets, sunscreen, anti-fungal creams, deodorant peak; respiratory medication tapers off. Restock + shelf-rearrange.",
+          "actionable": "Move ORS + sunscreen to counter visibility; cold/cough to back shelf"
+        },
+        {
+          "id": "d_2026W17_chronic_subscription",
+          "kind": "tech",
+          "title": "Chronic-Rx subscription retention 3.2x higher than walk-in",
+          "source": "magicpin pharmacy data Apr 2026",
+          "summary": "Pharmacies with WhatsApp-based refill reminder + auto-delivery for chronic patients see 88% 12-month retention vs 27% for walk-in-only chronic customers.",
+          "actionable": "Set up the WhatsApp reminder — covers diabetic, hypertensive, thyroid Rx"
+        },
+        {
+          "id": "d_2026W17_atorvastatin_recall",
+          "kind": "alert",
+          "title": "Voluntary recall: Specific atorvastatin batches by manufacturer X",
+          "source": "CDSCO alert Apr 2026",
+          "summary": "Two batches (numbers in alert) flagged for sub-potency. Customers should be informed; replacement available via distributor return chain. No safety risk for patients beyond suboptimal LDL control.",
+          "actionable": "Pull the batches; WhatsApp affected customers from your repeat-Rx list"
+        }
+      ],
+      "patient_content_library": [
+        {
+          "id": "pc_generic_branded",
+          "title": "Generic vs branded medicines — what's actually different?",
+          "channel": "whatsapp",
+          "length_seconds": 60,
+          "body": "The active molecule is identical and regulator-tested. Difference is in the binders, fillers, and brand markup. Generic is typically 40-60% cheaper. Two cases where brand may help: (1) very narrow-therapeutic-index drugs (some thyroid, blood thinners) where bioequivalence varies, (2) extended-release formulations. Otherwise, generic is the rational choice."
+        },
+        {
+          "id": "pc_storage",
+          "title": "Where to NOT store your medicines",
+          "channel": "whatsapp",
+          "length_seconds": 45,
+          "body": "Three places: (1) bathroom — humidity wrecks tablet integrity. (2) car glove box — temperature swings degrade most molecules in a month. (3) refrigerator door — temperature varies too much; use the main shelf if cold storage is needed. The kitchen at room temperature, away from sunlight, is best."
+        },
+        {
+          "id": "pc_summer_basics",
+          "title": "Summer first-aid: what every Indian household should have",
+          "channel": "whatsapp",
+          "length_seconds": 50,
+          "body": "Five items: ORS sachets (heat-stroke is sudden), broad-spectrum sunscreen SPF 50+ (apply 30 min before sun), anti-fungal cream (sweat triggers infections), Vaseline (chafing relief), and a thermometer. Skip energy drinks marketed as 'summer drinks' — sugar load is counterproductive when dehydrated."
+        }
+      ],
+      "seasonal_beats": [
+        {
+          "month_range": "Apr-Jun",
+          "note": "summer surge — ORS, sunscreen, anti-fungal, deodorant"
+        },
+        {
+          "month_range": "Jul-Aug",
+          "note": "monsoon — anti-bacterial, anti-fungal, immunity supplements peak"
+        },
+        {
+          "month_range": "Oct-Nov",
+          "note": "festival sweets → blood sugar spike — diabetic monitoring needs surge"
+        },
+        {
+          "month_range": "Dec-Jan",
+          "note": "respiratory peak — cough/cold/anti-allergic 2x baseline"
+        }
+      ],
+      "trend_signals": [
+        {
+          "query": "medicine home delivery",
+          "delta_yoy": 0.42,
+          "segment_age": "all",
+          "skew": "balanced"
+        },
+        {
+          "query": "generic medicine",
+          "delta_yoy": 0.34,
+          "segment_age": "30-65",
+          "skew": "balanced"
+        },
+        {
+          "query": "diabetes care kit",
+          "delta_yoy": 0.28,
+          "segment_age": "40-65",
+          "skew": "balanced"
+        },
+        {
+          "query": "blood pressure monitor",
+          "delta_yoy": 0.18,
+          "segment_age": "45-70",
+          "skew": "balanced"
+        }
+      ],
+      "regulatory_authorities": [
+        "CDSCO",
+        "State FDA",
+        "Drug Controller General of India (DCGI)"
+      ],
+      "professional_journals": [
+        "Pharmabiz",
+        "ChemistryView India",
+        "IPA Bulletin"
+      ]
+    },
+    "salons": {
+      "slug": "salons",
+      "display_name": "Salons & Beauty",
+      "voice": {
+        "tone": "warm_practical",
+        "register": "approachable_expert",
+        "code_mix": "hindi_english_natural",
+        "vocab_allowed": [
+          "balayage",
+          "highlights",
+          "keratin",
+          "smoothening",
+          "hair spa",
+          "manicure",
+          "pedicure",
+          "facial",
+          "threading",
+          "waxing",
+          "extensions",
+          "olaplex",
+          "wella",
+          "loreal",
+          "schwarzkopf",
+          "redken"
+        ],
+        "vocab_taboo": [
+          "guaranteed glow",
+          "permanent results",
+          "instant transformation",
+          "miracle",
+          "best in city"
+        ],
+        "salutation_examples": [
+          "Hi {first_name}",
+          "{salon_name} team"
+        ],
+        "tone_examples": [
+          "Bridal season is starting — bookings usually 2x normal in next 4 weeks",
+          "Quick one — your Saturday 5-7pm slot has been the strongest this month"
+        ]
+      },
+      "offer_catalog": [
+        {
+          "id": "sal_001",
+          "title": "Haircut @ ₹99",
+          "value": "99",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "sal_002",
+          "title": "FREE head massage with Haircut",
+          "value": "0",
+          "audience": "new_user",
+          "type": "free_addon"
+        },
+        {
+          "id": "sal_003",
+          "title": "Hair Spa @ ₹499",
+          "value": "499",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "sal_004",
+          "title": "Threading + Waxing combo @ ₹299",
+          "value": "299",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "sal_005",
+          "title": "Bridal Trial @ ₹999",
+          "value": "999",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "sal_006",
+          "title": "Keratin Treatment @ ₹2,499",
+          "value": "2499",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "sal_007",
+          "title": "Mani+Pedi Combo @ ₹599",
+          "value": "599",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "sal_008",
+          "title": "Annual Membership: 12 services @ ₹4,999",
+          "value": "4999",
+          "audience": "repeat_user",
+          "type": "membership"
+        }
+      ],
+      "peer_stats": {
+        "scope": "metro_unisex_salons_2026",
+        "avg_rating": 4.5,
+        "avg_review_count": 88,
+        "avg_views_30d": 2400,
+        "avg_calls_30d": 28,
+        "avg_directions_30d": 62,
+        "avg_ctr": 0.04,
+        "avg_photos": 14,
+        "avg_post_freq_days": 10,
+        "retention_3mo_pct": 0.55
+      },
+      "digest": [
+        {
+          "id": "d_2026W17_olaplex_no9",
+          "kind": "tech",
+          "title": "Olaplex No.9 launches in India — bond protector for chemically-treated hair",
+          "source": "Hair Brand News India, Apr 2026",
+          "summary": "Pre-shampoo bond protector targeting damage from frequent colour and smoothening. Distributors confirmed in Delhi/Mumbai/Bangalore. Wholesale ₹3,200/bottle, retail ~₹4,500.",
+          "actionable": "Worth piloting if your colour client mix is >25%"
+        },
+        {
+          "id": "d_2026W17_keratin_alt",
+          "kind": "trend",
+          "title": "Formaldehyde-free smoothening alternatives gaining share — citric-acid based",
+          "source": "Salon India magazine, Apr 2026",
+          "summary": "Brazilian citric-acid keratin alternatives now widely available. Lower fume, comparable hold for ~6-8 weeks. Pricing roughly +15% over standard keratin.",
+          "actionable": "Position as 'safe smoothening' for pregnancy / asthma clients"
+        },
+        {
+          "id": "d_2026W17_bridal_season_start",
+          "kind": "seasonal",
+          "title": "Wedding season opener — first lean April-May window before main Oct-Dec rush",
+          "source": "Wedding industry intel",
+          "summary": "Mini-bridal window April-May (~15% of annual bridal volume) often missed by salons focused on Oct-Dec. Pre-wedding skincare + mehendi-prep services peak now.",
+          "actionable": "Run a 'Bridal Trial @ ₹999' offer; book 2-month skincare package"
+        },
+        {
+          "id": "d_2026W17_olaplex_training",
+          "kind": "cde",
+          "title": "L'Oreal Professionnel India training: Advanced Balayage Masterclass",
+          "source": "L'Oreal Pro India calendar",
+          "date": "2026-05-08",
+          "summary": "2-day in-person training in Mumbai. ₹15,000 fee. Targeted at stylists with 2+ years of colour experience.",
+          "actionable": "Worth subsidising for one stylist if balayage demand is rising in your locality"
+        },
+        {
+          "id": "d_2026W17_walkin_priority",
+          "kind": "trend",
+          "title": "'Walk-in available' tag on GBP boosting calls 23% in metros",
+          "source": "magicpin internal, Apr 2026",
+          "summary": "Salons that explicitly add 'walk-in available' to their GBP description see 23% higher call volume in the same locality vs salons without. Effect strongest weekday afternoons.",
+          "actionable": "Add the tag to your GBP description this week"
+        }
+      ],
+      "patient_content_library": [
+        {
+          "id": "pc_keratin_safe",
+          "title": "Is keratin safe? What to ask before booking",
+          "channel": "whatsapp",
+          "length_seconds": 60,
+          "body": "Old-school keratin uses formaldehyde — safe in trained hands but not for pregnancy or asthma. Citric-acid alternatives exist now with similar hold. Two questions to ask any salon: (1) what's your activator? (2) is the room ventilated? If you don't get a clear answer, look elsewhere."
+        },
+        {
+          "id": "pc_balayage_vs_highlights",
+          "title": "Balayage vs highlights — which actually suits you?",
+          "channel": "whatsapp",
+          "length_seconds": 75,
+          "body": "Highlights are uniform stripes; balayage is hand-painted, growing out softly with no visible regrowth line. Highlights cost less but need touch-ups every 8 weeks. Balayage holds 4-5 months. If you don't visit the salon often, balayage is the practical choice."
+        },
+        {
+          "id": "pc_post_color_care",
+          "title": "Post-colour care — first 72 hours matter most",
+          "channel": "whatsapp",
+          "length_seconds": 45,
+          "body": "Three rules: no shampoo for 48h (let cuticle close), use sulphate-free shampoo from day 3, and avoid hot water washes for the first month. Skip these and you'll lose 30% of the colour vibrance in the first wash."
+        }
+      ],
+      "seasonal_beats": [
+        {
+          "month_range": "Oct-Dec",
+          "note": "primary wedding/festival season — bridal package bookings 4x baseline"
+        },
+        {
+          "month_range": "Apr-May",
+          "note": "secondary bridal window + summer hair-care surge"
+        },
+        {
+          "month_range": "Jul-Aug",
+          "note": "monsoon haircare focus (anti-frizz, scalp treatments)"
+        },
+        {
+          "month_range": "Mar",
+          "note": "Holi colour-recovery surge — book hair spas the week after"
+        }
+      ],
+      "trend_signals": [
+        {
+          "query": "balayage near me",
+          "delta_yoy": 0.45,
+          "segment_age": "25-40",
+          "skew": "female"
+        },
+        {
+          "query": "keratin treatment price",
+          "delta_yoy": 0.18,
+          "segment_age": "25-45",
+          "skew": "female"
+        },
+        {
+          "query": "men's haircut delhi",
+          "delta_yoy": 0.22,
+          "segment_age": "20-35",
+          "skew": "male"
+        },
+        {
+          "query": "bridal makeup artist",
+          "delta_yoy": 0.31,
+          "segment_age": "22-32",
+          "skew": "female"
+        }
+      ],
+      "regulatory_authorities": [
+        "FDA India (cosmetic ingredient compliance)"
+      ],
+      "professional_journals": [
+        "Salon India",
+        "Pure Beauty India"
+      ]
+    },
+    "restaurants": {
+      "slug": "restaurants",
+      "display_name": "Restaurants & Cafes",
+      "voice": {
+        "tone": "warm_busy_practical",
+        "register": "fellow_operator",
+        "code_mix": "hindi_english_natural",
+        "vocab_allowed": [
+          "footfall",
+          "covers",
+          "AOV",
+          "RPC",
+          "table turnover",
+          "reservations",
+          "GRO",
+          "weekend brunch",
+          "happy hour",
+          "thali",
+          "biryani",
+          "tandoor"
+        ],
+        "vocab_taboo": [
+          "best food in city",
+          "guaranteed packed house",
+          "miracle marketing",
+          "viral guarantee"
+        ],
+        "salutation_examples": [
+          "Hi {chef_or_owner_first_name}",
+          "{restaurant_name} team"
+        ],
+        "tone_examples": [
+          "Quick one — IPL match nights have been 1.5x your weekday avg this season",
+          "Spotted: 'biryani delivery' searches in your sublocality up 28% this week"
+        ]
+      },
+      "offer_catalog": [
+        {
+          "id": "res_001",
+          "title": "Flat 30% OFF on total bill (limit ₹500)",
+          "value": "30%",
+          "audience": "new_user",
+          "type": "percentage_discount"
+        },
+        {
+          "id": "res_002",
+          "title": "Buy 1 Pizza Get 1 Free (Tue-Thu)",
+          "value": "BOGO",
+          "audience": "new_user",
+          "type": "bogo"
+        },
+        {
+          "id": "res_003",
+          "title": "Weekday Lunch Thali @ ₹149",
+          "value": "149",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "res_004",
+          "title": "Free Starter on orders > ₹1,200",
+          "value": "free_addon",
+          "audience": "new_user",
+          "type": "free_addon"
+        },
+        {
+          "id": "res_005",
+          "title": "Match-night Combo @ ₹399 (food + drink)",
+          "value": "399",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "res_006",
+          "title": "Family Sunday Brunch @ ₹699/pax",
+          "value": "699",
+          "audience": "new_user",
+          "type": "service_at_price"
+        },
+        {
+          "id": "res_007",
+          "title": "Free Delivery > ₹500",
+          "value": "free_delivery",
+          "audience": "new_user",
+          "type": "free_addon"
+        },
+        {
+          "id": "res_008",
+          "title": "Birthday: Free Cake on parties of 6+",
+          "value": "free_addon",
+          "audience": "all",
+          "type": "free_addon"
+        }
+      ],
+      "peer_stats": {
+        "scope": "metro_casual_dining_2026",
+        "avg_rating": 4.2,
+        "avg_review_count": 142,
+        "avg_views_30d": 4800,
+        "avg_calls_30d": 38,
+        "avg_directions_30d": 95,
+        "avg_ctr": 0.025,
+        "avg_photos": 22,
+        "avg_post_freq_days": 7,
+        "retention_30d_pct": 0.18
+      },
+      "digest": [
+        {
+          "id": "d_2026W17_ipl_window",
+          "kind": "seasonal",
+          "title": "IPL home-match Saturdays underperformed weeknight matches across metros",
+          "source": "magicpin order data, Apr 2026",
+          "summary": "Saturday IPL matches shift orders to home-watch parties; restaurant covers down 12% vs Saturday average. Weeknight matches drive +18% covers. Adjust promo days accordingly.",
+          "actionable": "Push match-night combos on Tue/Wed/Thu match dates only"
+        },
+        {
+          "id": "d_2026W17_packaged_food_gst",
+          "kind": "compliance",
+          "title": "GST council clarifies 5% rate for restaurant takeaway packaging from 2026-06-01",
+          "source": "GST Council circular 224/2026",
+          "summary": "Single-use plastic surcharge added to packaging cost for orders >₹500. Effective June 1. Cloud kitchens hit hardest.",
+          "actionable": "Audit your packaging cost; consider Eco-pack alternative if volume justifies"
+        },
+        {
+          "id": "d_2026W17_zomato_visibility",
+          "kind": "trend",
+          "title": "Zomato 'verified' badge correlates with +24% impressions in Tier-1 cities",
+          "source": "Zomato partner update, Apr 2026",
+          "summary": "Verification requires uploaded GST cert + 6 months continuous operation. Most eligible mid-size restaurants haven't applied; 5-day approval.",
+          "actionable": "Apply via partner dashboard if you've crossed 6 months"
+        },
+        {
+          "id": "d_2026W17_swiggy_iCare",
+          "kind": "tech",
+          "title": "Swiggy iCare: AI complaint summarizer launching Apr 2026",
+          "source": "Swiggy partner blog 2026-04-12",
+          "summary": "Auto-summarises customer complaints into themes (cold food / late / wrong order). Free for Pro merchants. Reveals pattern most operators miss.",
+          "actionable": "Enable in dashboard; review weekly themes Sunday evening"
+        },
+        {
+          "id": "d_2026W17_dish_trend",
+          "kind": "trend",
+          "title": "'Sugar-free dessert' searches +52% YoY across Indian metros",
+          "source": "Google Trends Apr 2026",
+          "summary": "Concentrated in 28-45 age band; correlated with rising diabetic awareness. Two new options on dessert menus seeing strong attach rate: keto cheesecake, almond-flour brownie.",
+          "actionable": "Add one sugar-free dessert; mark prominently on menu and GBP"
+        }
+      ],
+      "patient_content_library": [
+        {
+          "id": "pc_ordering_smart",
+          "title": "Three things to look for before ordering food online",
+          "channel": "whatsapp",
+          "length_seconds": 60,
+          "body": "(1) Look at the latest review's date — if last review is 30+ days old, the kitchen may be off. (2) Filter for 4★+ reviews mentioning your specific dish. (3) Order at peak hours — fresh prep, not warmed-up morning batch. These three filter out 80% of bad-experience risk."
+        },
+        {
+          "id": "pc_thali_economics",
+          "title": "Why a ₹149 thali is the best lunch deal in town",
+          "channel": "whatsapp",
+          "length_seconds": 45,
+          "body": "A weekday thali for ₹149 covers your daily protein, two veggies, dal, rice, roti, and pickle/sweet. Buying these separately at any market in the neighbourhood: ₹240+. The only way restaurants make this work is high lunch volume — which means freshly-cooked, not standing in a chafer."
+        }
+      ],
+      "seasonal_beats": [
+        {
+          "month_range": "Mar-Apr",
+          "note": "IPL season — match-night promos on Tue/Wed/Thu; not weekends"
+        },
+        {
+          "month_range": "Oct-Nov",
+          "note": "Diwali corporate gifting + family-feast bookings"
+        },
+        {
+          "month_range": "Dec",
+          "note": "Christmas + New Year — set menu sales 3x baseline"
+        },
+        {
+          "month_range": "Jul-Aug",
+          "note": "monsoon delivery surge; rain-day discount window"
+        },
+        {
+          "month_range": "Feb 14",
+          "note": "Valentine's prix-fixe — book starting 2 weeks prior"
+        }
+      ],
+      "trend_signals": [
+        {
+          "query": "biryani near me",
+          "delta_yoy": 0.18,
+          "segment_age": "all",
+          "skew": "balanced"
+        },
+        {
+          "query": "weekday lunch thali",
+          "delta_yoy": 0.34,
+          "segment_age": "office_25-45",
+          "skew": "balanced"
+        },
+        {
+          "query": "sugar free dessert",
+          "delta_yoy": 0.52,
+          "segment_age": "28-45",
+          "skew": "balanced"
+        },
+        {
+          "query": "match night offer",
+          "delta_yoy": 0.65,
+          "segment_age": "20-40",
+          "skew": "male"
+        },
+        {
+          "query": "small party catering",
+          "delta_yoy": 0.22,
+          "segment_age": "30-50",
+          "skew": "female"
+        }
+      ],
+      "regulatory_authorities": [
+        "FSSAI",
+        "Local Health Department",
+        "GST Council"
+      ],
+      "professional_journals": [
+        "FoodService India",
+        "Hospitality Bizz"
+      ]
+    }
+  },
+  "merchants": {
+    "m_020_renu_salon_lucknow": {
+      "merchant_id": "m_020_renu_salon_lucknow",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Beauty Lounge by Renu",
+        "city": "Lucknow",
+        "locality": "Gomti Nagar",
+        "place_id": "ChIJ_GOMTI_NAGAR_SALONS_020",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Renu",
+        "established_year": 2015
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_remaining": 0,
+        "days_since_expiry": 41
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2945,
+        "calls": 33,
+        "directions": 93,
+        "ctr": 0.051,
+        "leads": 29,
+        "delta_7d": {
+          "views_pct": 0.04,
+          "calls_pct": -0.18
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1062
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_042_pooja_gym_pune": {
+      "merchant_id": "m_042_pooja_gym_pune",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Bend & Burn",
+        "city": "Pune",
+        "locality": "Aundh",
+        "place_id": "ChIJ_AUNDH_GYMS_042",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Pooja",
+        "established_year": 2017
+      },
+      "subscription": {
+        "status": "trial",
+        "plan": "Trial",
+        "days_remaining": 10,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5509,
+        "calls": 47,
+        "directions": 99,
+        "ctr": 0.059,
+        "leads": 15,
+        "delta_7d": {
+          "views_pct": -0.12,
+          "calls_pct": -0.27
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 667
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_029_anand_restaurant_chandigarh": {
+      "merchant_id": "m_029_anand_restaurant_chandigarh",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Chai Point Cafe",
+        "city": "Chandigarh",
+        "locality": "Sector 8",
+        "place_id": "ChIJ_SECTOR_8_RESTAURANTS_029",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Anand",
+        "established_year": 2011
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 148,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2189,
+        "calls": 26,
+        "directions": 82,
+        "ctr": 0.025,
+        "leads": 13,
+        "delta_7d": {
+          "views_pct": -0.08,
+          "calls_pct": -0.21
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1525
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_026_karim_salon_ahmedabad": {
+      "merchant_id": "m_026_karim_salon_ahmedabad",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Karim's Salon",
+        "city": "Ahmedabad",
+        "locality": "Navrangpura",
+        "place_id": "ChIJ_NAVRANGPURA_SALONS_026",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Karim",
+        "established_year": 2019
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 273,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5344,
+        "calls": 13,
+        "directions": 37,
+        "ctr": 0.024,
+        "leads": 9,
+        "delta_7d": {
+          "views_pct": 0.2,
+          "calls_pct": 0.1
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1611
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_035_manisha_gym_delhi": {
+      "merchant_id": "m_035_manisha_gym_delhi",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Vyayam Yoga",
+        "city": "Delhi",
+        "locality": "Dwarka",
+        "place_id": "ChIJ_DWARKA_GYMS_035",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Manisha",
+        "established_year": 2010
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 142,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2612,
+        "calls": 30,
+        "directions": 68,
+        "ctr": 0.038,
+        "leads": 5,
+        "delta_7d": {
+          "views_pct": -0.26,
+          "calls_pct": 0.02
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1026
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_041_akash_gym_hyderabad": {
+      "merchant_id": "m_041_akash_gym_hyderabad",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Fit Republic",
+        "city": "Hyderabad",
+        "locality": "Gachibowli",
+        "place_id": "ChIJ_GACHIBOWLI_GYMS_041",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "te"
+        ],
+        "owner_first_name": "Akash",
+        "established_year": 2022
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 111,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3185,
+        "calls": 7,
+        "directions": 40,
+        "ctr": 0.019,
+        "leads": 0,
+        "delta_7d": {
+          "views_pct": 0.05,
+          "calls_pct": 0.03
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1564
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_008_zenyoga_gym_chennai": {
+      "merchant_id": "m_008_zenyoga_gym_chennai",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Zen Yoga Studio",
+        "city": "Chennai",
+        "locality": "Mylapore",
+        "place_id": "ChIJ_MYLAPORE_GYM_008",
+        "verified": true,
+        "languages": [
+          "en",
+          "ta",
+          "hi"
+        ],
+        "owner_first_name": "Padma",
+        "established_year": 2017
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 180
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 880,
+        "calls": 18,
+        "directions": 38,
+        "ctr": 0.062,
+        "leads": 12,
+        "delta_7d": {
+          "views_pct": 0.1,
+          "calls_pct": 0.15
+        }
+      },
+      "offers": [
+        {
+          "id": "o_zen_001",
+          "title": "First Month @ ₹499",
+          "status": "active",
+          "started": "2026-03-01"
+        },
+        {
+          "id": "o_zen_002",
+          "title": "Free Body Composition Analysis",
+          "status": "active",
+          "started": "2026-03-01"
+        }
+      ],
+      "conversation_history": [
+        {
+          "ts": "2026-04-23T09:00:00Z",
+          "from": "merchant",
+          "body": "Hi I want to add a kids yoga program — what should it look like?",
+          "engagement": "intent_planning"
+        },
+        {
+          "ts": "2026-04-23T09:05:00Z",
+          "from": "vera",
+          "body": "Great idea — kids yoga summer camps are peaking now. Suggest 4-week program, 3 classes/week, age 7-12, ₹2,499. Want me to draft the GBP post + Insta carousel?",
+          "engagement": "merchant_replied"
+        }
+      ],
+      "customer_aggregate": {
+        "total_active_members": 95,
+        "monthly_churn_pct": 0.05,
+        "trial_to_paid_pct": 0.55
+      },
+      "signals": [
+        "high_retention",
+        "active_planning",
+        "boutique_segment"
+      ],
+      "review_themes": [
+        {
+          "theme": "instructor_quality",
+          "sentiment": "pos",
+          "occurrences_30d": 9
+        },
+        {
+          "theme": "small_classes",
+          "sentiment": "pos",
+          "occurrences_30d": 6
+        }
+      ]
+    },
+    "m_023_sushma_salon_pune": {
+      "merchant_id": "m_023_sushma_salon_pune",
+      "category_slug": "salons",
+      "identity": {
+        "name": "The Beauty Bar",
+        "city": "Pune",
+        "locality": "Baner",
+        "place_id": "ChIJ_BANER_SALONS_023",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Sushma",
+        "established_year": 2016
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_remaining": 0,
+        "days_since_expiry": 39
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2547,
+        "calls": 22,
+        "directions": 50,
+        "ctr": 0.058,
+        "leads": 10,
+        "delta_7d": {
+          "views_pct": 0.08,
+          "calls_pct": 0.02
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1454
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_033_anand_restaurant_bangalore": {
+      "merchant_id": "m_033_anand_restaurant_bangalore",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Chai Point Cafe",
+        "city": "Bangalore",
+        "locality": "BTM Layout",
+        "place_id": "ChIJ_BTM_LAYOUT_RESTAURANTS_033",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "kn"
+        ],
+        "owner_first_name": "Anand",
+        "established_year": 2021
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 211,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2349,
+        "calls": 13,
+        "directions": 52,
+        "ctr": 0.025,
+        "leads": 2,
+        "delta_7d": {
+          "views_pct": 0.13,
+          "calls_pct": -0.04
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1012
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_018_dr_asha_dentist_ahmedabad": {
+      "merchant_id": "m_018_dr_asha_dentist_ahmedabad",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "Asha Dental Care",
+        "city": "Ahmedabad",
+        "locality": "Thaltej",
+        "place_id": "ChIJ_THALTEJ_DENTISTS_018",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Dr. Asha",
+        "established_year": 2019
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 159,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2105,
+        "calls": 23,
+        "directions": 62,
+        "ctr": 0.034,
+        "leads": 22,
+        "delta_7d": {
+          "views_pct": -0.01,
+          "calls_pct": 0.14
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1980
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_024_geeta_salon_bangalore": {
+      "merchant_id": "m_024_geeta_salon_bangalore",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Glow Up Salon",
+        "city": "Bangalore",
+        "locality": "Koramangala",
+        "place_id": "ChIJ_KORAMANGALA_SALONS_024",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "kn"
+        ],
+        "owner_first_name": "Geeta",
+        "established_year": 2016
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 91,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 1957,
+        "calls": 5,
+        "directions": 24,
+        "ctr": 0.026,
+        "leads": 1,
+        "delta_7d": {
+          "views_pct": 0.23,
+          "calls_pct": -0.22
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 326
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_044_vinod_pharmacie_chennai": {
+      "merchant_id": "m_044_vinod_pharmacie_chennai",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Family Health Pharmacy",
+        "city": "Chennai",
+        "locality": "Porur",
+        "place_id": "ChIJ_PORUR_PHARMACIES_044",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "ta"
+        ],
+        "owner_first_name": "Vinod",
+        "established_year": 2019
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_remaining": 0,
+        "days_since_expiry": 59
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3421,
+        "calls": 28,
+        "directions": 79,
+        "ctr": 0.025,
+        "leads": 10,
+        "delta_7d": {
+          "views_pct": 0.25,
+          "calls_pct": 0.05
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1473
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_045_vinod_pharmacie_mumbai": {
+      "merchant_id": "m_045_vinod_pharmacie_mumbai",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Family Health Pharmacy",
+        "city": "Mumbai",
+        "locality": "Worli",
+        "place_id": "ChIJ_WORLI_PHARMACIES_045",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "mr"
+        ],
+        "owner_first_name": "Vinod",
+        "established_year": 2016
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 227,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5572,
+        "calls": 31,
+        "directions": 82,
+        "ctr": 0.04,
+        "leads": 18,
+        "delta_7d": {
+          "views_pct": -0.14,
+          "calls_pct": -0.12
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 602
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_006_southindiancafe_restaurant_bangalore": {
+      "merchant_id": "m_006_southindiancafe_restaurant_bangalore",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Mylari South Indian Cafe",
+        "city": "Bangalore",
+        "locality": "Indiranagar",
+        "place_id": "ChIJ_INDIRANAGAR_RESTAURANT_006",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "kn"
+        ],
+        "owner_first_name": "Suresh",
+        "established_year": 2014
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 240
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 12400,
+        "calls": 88,
+        "directions": 320,
+        "ctr": 0.032,
+        "leads": 145,
+        "delta_7d": {
+          "views_pct": 0.05,
+          "calls_pct": 0.02
+        }
+      },
+      "offers": [
+        {
+          "id": "o_mylari_001",
+          "title": "Weekday Lunch Thali @ ₹149",
+          "status": "active",
+          "started": "2026-01-10"
+        }
+      ],
+      "conversation_history": [
+        {
+          "ts": "2026-04-25T11:00:00Z",
+          "from": "vera",
+          "body": "Your weekday thali is doing well — 18 orders/day avg. Want me to add a corporate-bulk version?",
+          "engagement": "merchant_replied"
+        },
+        {
+          "ts": "2026-04-25T11:30:00Z",
+          "from": "merchant",
+          "body": "Yes good idea, what would it look like",
+          "engagement": "intent_question"
+        }
+      ],
+      "customer_aggregate": {
+        "total_unique_ytd": 4200,
+        "repeat_customer_pct": 0.42,
+        "delivery_share_pct": 0.45
+      },
+      "signals": [
+        "high_volume",
+        "stable_growth",
+        "engaged_in_last_24h"
+      ],
+      "review_themes": [
+        {
+          "theme": "thali_quality",
+          "sentiment": "pos",
+          "occurrences_30d": 22
+        },
+        {
+          "theme": "weekend_busy",
+          "sentiment": "neg",
+          "occurrences_30d": 3
+        }
+      ]
+    },
+    "m_049_komal_pharmacie_lucknow": {
+      "merchant_id": "m_049_komal_pharmacie_lucknow",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Daily Care Medicos",
+        "city": "Lucknow",
+        "locality": "Alambagh",
+        "place_id": "ChIJ_ALAMBAGH_PHARMACIES_049",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Komal",
+        "established_year": 2023
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 278,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3384,
+        "calls": 34,
+        "directions": 80,
+        "ctr": 0.033,
+        "leads": 34,
+        "delta_7d": {
+          "views_pct": 0.2,
+          "calls_pct": -0.19
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1487
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_040_karan_gym_ahmedabad": {
+      "merchant_id": "m_040_karan_gym_ahmedabad",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Iron Forge Fitness",
+        "city": "Ahmedabad",
+        "locality": "Thaltej",
+        "place_id": "ChIJ_THALTEJ_GYMS_040",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Karan",
+        "established_year": 2022
+      },
+      "subscription": {
+        "status": "trial",
+        "plan": "Trial",
+        "days_remaining": 3,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 4613,
+        "calls": 11,
+        "directions": 26,
+        "ctr": 0.044,
+        "leads": 4,
+        "delta_7d": {
+          "views_pct": -0.2,
+          "calls_pct": -0.26
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 951
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_027_anand_restaurant_chennai": {
+      "merchant_id": "m_027_anand_restaurant_chennai",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Chai Point Cafe",
+        "city": "Chennai",
+        "locality": "Tambaram",
+        "place_id": "ChIJ_TAMBARAM_RESTAURANTS_027",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "ta"
+        ],
+        "owner_first_name": "Anand",
+        "established_year": 2014
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 262,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3861,
+        "calls": 27,
+        "directions": 71,
+        "ctr": 0.045,
+        "leads": 3,
+        "delta_7d": {
+          "views_pct": 0.11,
+          "calls_pct": 0.28
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 550
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_013_dr_neha_dentist_jaipur": {
+      "merchant_id": "m_013_dr_neha_dentist_jaipur",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "Pearl Dental Studio",
+        "city": "Jaipur",
+        "locality": "C-Scheme",
+        "place_id": "ChIJ_C-SCHEME_DENTISTS_013",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Dr. Neha",
+        "established_year": 2013
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 195,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3223,
+        "calls": 39,
+        "directions": 79,
+        "ctr": 0.017,
+        "leads": 39,
+        "delta_7d": {
+          "views_pct": 0.21,
+          "calls_pct": -0.08
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1858
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_001_drmeera_dentist_delhi": {
+      "merchant_id": "m_001_drmeera_dentist_delhi",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "Dr. Meera's Dental Clinic",
+        "city": "Delhi",
+        "locality": "Lajpat Nagar",
+        "place_id": "ChIJ_LAJPATNAGAR_DENTIST_001",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Meera",
+        "established_year": 2018
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 82,
+        "renewed_at": "2026-02-04"
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2410,
+        "calls": 18,
+        "directions": 45,
+        "ctr": 0.021,
+        "leads": 9,
+        "delta_7d": {
+          "views_pct": 0.18,
+          "calls_pct": -0.05,
+          "ctr_pct": 0.02
+        }
+      },
+      "offers": [
+        {
+          "id": "o_meera_001",
+          "title": "Dental Cleaning @ ₹299",
+          "status": "active",
+          "started": "2026-03-01"
+        },
+        {
+          "id": "o_meera_002",
+          "title": "Deep Cleaning @ ₹499",
+          "status": "expired",
+          "ended": "2026-02-28"
+        }
+      ],
+      "conversation_history": [
+        {
+          "ts": "2026-04-24T10:12:00Z",
+          "from": "vera",
+          "body": "Profile audit done — your photos are 8/10, description complete, but Google posts are stale (last post 22 days ago). Want me to draft 3 posts you can review?",
+          "engagement": "merchant_replied"
+        },
+        {
+          "ts": "2026-04-24T10:18:00Z",
+          "from": "merchant",
+          "body": "Yes please, focus on whitening and aligners",
+          "engagement": "intent_action"
+        }
+      ],
+      "customer_aggregate": {
+        "total_unique_ytd": 540,
+        "lapsed_180d_plus": 78,
+        "retention_6mo_pct": 0.38,
+        "high_risk_adult_count": 124
+      },
+      "signals": [
+        "stale_posts:22d",
+        "ctr_below_peer_median",
+        "high_risk_adult_cohort",
+        "engaged_in_last_48h"
+      ],
+      "review_themes": [
+        {
+          "theme": "wait_time",
+          "sentiment": "neg",
+          "occurrences_30d": 3,
+          "common_quote": "had to wait 30 min on Sunday afternoon"
+        },
+        {
+          "theme": "doctor_manner",
+          "sentiment": "pos",
+          "occurrences_30d": 5,
+          "common_quote": "Dr. Meera explains everything patiently"
+        }
+      ]
+    },
+    "m_025_salim_salon_mumbai": {
+      "merchant_id": "m_025_salim_salon_mumbai",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Studio Cuts",
+        "city": "Mumbai",
+        "locality": "Vile Parle",
+        "place_id": "ChIJ_VILE_PARLE_SALONS_025",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "mr"
+        ],
+        "owner_first_name": "Salim",
+        "established_year": 2011
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_remaining": 0,
+        "days_since_expiry": 89
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 4061,
+        "calls": 31,
+        "directions": 75,
+        "ctr": 0.045,
+        "leads": 14,
+        "delta_7d": {
+          "views_pct": 0.06,
+          "calls_pct": 0.2
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1298
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_017_dr_rajan_dentist_mumbai": {
+      "merchant_id": "m_017_dr_rajan_dentist_mumbai",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "City Dental Clinic",
+        "city": "Mumbai",
+        "locality": "Andheri West",
+        "place_id": "ChIJ_ANDHERI_WEST_DENTISTS_017",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "mr"
+        ],
+        "owner_first_name": "Dr. Rajan",
+        "established_year": 2016
+      },
+      "subscription": {
+        "status": "trial",
+        "plan": "Trial",
+        "days_remaining": 3,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5466,
+        "calls": 41,
+        "directions": 104,
+        "ctr": 0.03,
+        "leads": 5,
+        "delta_7d": {
+          "views_pct": -0.24,
+          "calls_pct": -0.14
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1826
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_010_sunrisepharm_pharmacy_lucknow": {
+      "merchant_id": "m_010_sunrisepharm_pharmacy_lucknow",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Sunrise Medicos",
+        "city": "Lucknow",
+        "locality": "Gomti Nagar",
+        "place_id": "ChIJ_GOMTINAGAR_PHARMACY_010",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Vikas",
+        "established_year": 2020
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Basic",
+        "days_remaining": 200
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 720,
+        "calls": 14,
+        "directions": 32,
+        "ctr": 0.041,
+        "leads": 8,
+        "delta_7d": {
+          "views_pct": 0.02,
+          "calls_pct": 0.05
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 540,
+        "repeat_customer_pct": 0.45,
+        "chronic_rx_count": 60
+      },
+      "signals": [
+        "unverified_gbp",
+        "no_active_offers",
+        "no_recent_conversation",
+        "delivery_not_set_up"
+      ],
+      "review_themes": []
+    },
+    "m_047_anil_pharmacie_chandigarh": {
+      "merchant_id": "m_047_anil_pharmacie_chandigarh",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Healthwell Pharmacy",
+        "city": "Chandigarh",
+        "locality": "Mohali",
+        "place_id": "ChIJ_MOHALI_PHARMACIES_047",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Anil",
+        "established_year": 2010
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 23,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2307,
+        "calls": 8,
+        "directions": 42,
+        "ctr": 0.031,
+        "leads": 4,
+        "delta_7d": {
+          "views_pct": -0.23,
+          "calls_pct": 0.28
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 698
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_034_suresh_restaurant_delhi": {
+      "merchant_id": "m_034_suresh_restaurant_delhi",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Madras Express",
+        "city": "Delhi",
+        "locality": "Dwarka",
+        "place_id": "ChIJ_DWARKA_RESTAURANTS_034",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Suresh",
+        "established_year": 2014
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 124,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5125,
+        "calls": 12,
+        "directions": 36,
+        "ctr": 0.056,
+        "leads": 12,
+        "delta_7d": {
+          "views_pct": -0.16,
+          "calls_pct": -0.14
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1773
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_046_sunita_pharmacie_lucknow": {
+      "merchant_id": "m_046_sunita_pharmacie_lucknow",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Reliable Medicos",
+        "city": "Lucknow",
+        "locality": "Aliganj",
+        "place_id": "ChIJ_ALIGANJ_PHARMACIES_046",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Sunita",
+        "established_year": 2017
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 115,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 1715,
+        "calls": 2,
+        "directions": 30,
+        "ctr": 0.054,
+        "leads": 2,
+        "delta_7d": {
+          "views_pct": -0.25,
+          "calls_pct": 0.27
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 245
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_003_studio11_salon_hyderabad": {
+      "merchant_id": "m_003_studio11_salon_hyderabad",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Studio11 Family Salon",
+        "city": "Hyderabad",
+        "locality": "Kapra",
+        "place_id": "ChIJ_KAPRA_SALON_003",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "te"
+        ],
+        "owner_first_name": "Lakshmi",
+        "established_year": 2019
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 145
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 4980,
+        "calls": 62,
+        "directions": 142,
+        "ctr": 0.048,
+        "leads": 38,
+        "delta_7d": {
+          "views_pct": 0.14,
+          "calls_pct": 0.2,
+          "ctr_pct": 0.05
+        }
+      },
+      "offers": [
+        {
+          "id": "o_studio11_001",
+          "title": "Haircut @ ₹99",
+          "status": "active",
+          "started": "2026-03-01"
+        },
+        {
+          "id": "o_studio11_002",
+          "title": "Hair Spa @ ₹499",
+          "status": "active",
+          "started": "2026-03-15"
+        }
+      ],
+      "conversation_history": [
+        {
+          "ts": "2026-04-22T15:00:00Z",
+          "from": "vera",
+          "body": "Spotted: bridal-trial searches in Kapra +28% this week. Want me to push your bridal package as a GBP post?",
+          "engagement": "merchant_no_reply"
+        }
+      ],
+      "customer_aggregate": {
+        "total_unique_ytd": 1150,
+        "lapsed_90d_plus": 220,
+        "retention_3mo_pct": 0.62
+      },
+      "signals": [
+        "high_engagement",
+        "above_peer_median_calls",
+        "growing_views_7d"
+      ],
+      "review_themes": [
+        {
+          "theme": "stylist_skill",
+          "sentiment": "pos",
+          "occurrences_30d": 12,
+          "common_quote": "Priya is the best for balayage"
+        },
+        {
+          "theme": "saturday_wait",
+          "sentiment": "neg",
+          "occurrences_30d": 2
+        }
+      ]
+    },
+    "m_002_bharat_dentist_mumbai": {
+      "merchant_id": "m_002_bharat_dentist_mumbai",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "Bharat Dental Care",
+        "city": "Mumbai",
+        "locality": "Andheri West",
+        "place_id": "ChIJ_ANDHERI_DENTIST_002",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi",
+          "mr"
+        ],
+        "owner_first_name": "Bharat",
+        "established_year": 2010
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 12,
+        "renewed_at": "2025-04-26"
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 980,
+        "calls": 4,
+        "directions": 18,
+        "ctr": 0.018,
+        "leads": 2,
+        "delta_7d": {
+          "views_pct": -0.22,
+          "calls_pct": -0.5,
+          "ctr_pct": -0.1
+        }
+      },
+      "offers": [],
+      "conversation_history": [
+        {
+          "ts": "2026-04-10T11:00:00Z",
+          "from": "vera",
+          "body": "Subscription expires in 16 days — Bharat Dental Care...",
+          "engagement": "merchant_no_reply"
+        }
+      ],
+      "customer_aggregate": {
+        "total_unique_ytd": 220,
+        "lapsed_180d_plus": 95,
+        "retention_6mo_pct": 0.18
+      },
+      "signals": [
+        "renewal_due_soon:12d",
+        "perf_dip_severe",
+        "unverified_gbp",
+        "dormant_with_vera_14d",
+        "no_active_offers"
+      ],
+      "review_themes": []
+    },
+    "m_043_komal_pharmacie_ahmedabad": {
+      "merchant_id": "m_043_komal_pharmacie_ahmedabad",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Daily Care Medicos",
+        "city": "Ahmedabad",
+        "locality": "Naranpura",
+        "place_id": "ChIJ_NARANPURA_PHARMACIES_043",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Komal",
+        "established_year": 2021
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 270,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 4622,
+        "calls": 25,
+        "directions": 71,
+        "ctr": 0.03,
+        "leads": 8,
+        "delta_7d": {
+          "views_pct": 0.07,
+          "calls_pct": -0.02
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1391
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_036_roshni_gym_ahmedabad": {
+      "merchant_id": "m_036_roshni_gym_ahmedabad",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Active Life Gym",
+        "city": "Ahmedabad",
+        "locality": "Maninagar",
+        "place_id": "ChIJ_MANINAGAR_GYMS_036",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Roshni",
+        "established_year": 2020
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 35,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2954,
+        "calls": 5,
+        "directions": 17,
+        "ctr": 0.052,
+        "leads": 5,
+        "delta_7d": {
+          "views_pct": -0.25,
+          "calls_pct": 0.27
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 60
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_050_bharti_pharmacie_chennai": {
+      "merchant_id": "m_050_bharti_pharmacie_chennai",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Wellness Cart",
+        "city": "Chennai",
+        "locality": "OMR",
+        "place_id": "ChIJ_OMR_PHARMACIES_050",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi",
+          "ta"
+        ],
+        "owner_first_name": "Bharti",
+        "established_year": 2021
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 16,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 895,
+        "calls": 6,
+        "directions": 25,
+        "ctr": 0.044,
+        "leads": 4,
+        "delta_7d": {
+          "views_pct": -0.23,
+          "calls_pct": -0.01
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1535
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_038_pooja_gym_chandigarh": {
+      "merchant_id": "m_038_pooja_gym_chandigarh",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Bend & Burn",
+        "city": "Chandigarh",
+        "locality": "Sector 8",
+        "place_id": "ChIJ_SECTOR_8_GYMS_038",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Pooja",
+        "established_year": 2017
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 132,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3778,
+        "calls": 41,
+        "directions": 85,
+        "ctr": 0.026,
+        "leads": 23,
+        "delta_7d": {
+          "views_pct": 0.2,
+          "calls_pct": 0.03
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1066
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_016_dr_rajan_dentist_pune": {
+      "merchant_id": "m_016_dr_rajan_dentist_pune",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "City Dental Clinic",
+        "city": "Pune",
+        "locality": "Baner",
+        "place_id": "ChIJ_BANER_DENTISTS_016",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Dr. Rajan",
+        "established_year": 2020
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 291,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 1645,
+        "calls": 4,
+        "directions": 18,
+        "ctr": 0.017,
+        "leads": 0,
+        "delta_7d": {
+          "views_pct": 0.21,
+          "calls_pct": -0.18
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 138
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_039_karan_gym_jaipur": {
+      "merchant_id": "m_039_karan_gym_jaipur",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Iron Forge Fitness",
+        "city": "Jaipur",
+        "locality": "Jhotwara",
+        "place_id": "ChIJ_JHOTWARA_GYMS_039",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Karan",
+        "established_year": 2015
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 85,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2055,
+        "calls": 23,
+        "directions": 52,
+        "ctr": 0.027,
+        "leads": 3,
+        "delta_7d": {
+          "views_pct": 0.22,
+          "calls_pct": 0.11
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 657
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_014_dr_asha_dentist_chandigarh": {
+      "merchant_id": "m_014_dr_asha_dentist_chandigarh",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "Asha Dental Care",
+        "city": "Chandigarh",
+        "locality": "Sector 17",
+        "place_id": "ChIJ_SECTOR_17_DENTISTS_014",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Dr. Asha",
+        "established_year": 2023
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 97,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3722,
+        "calls": 33,
+        "directions": 96,
+        "ctr": 0.029,
+        "leads": 31,
+        "delta_7d": {
+          "views_pct": -0.22,
+          "calls_pct": -0.26
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 88
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_030_sandeep_restaurant_chandigarh": {
+      "merchant_id": "m_030_sandeep_restaurant_chandigarh",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Tandoor Treats",
+        "city": "Chandigarh",
+        "locality": "Sector 35",
+        "place_id": "ChIJ_SECTOR_35_RESTAURANTS_030",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Sandeep",
+        "established_year": 2017
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 131,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3561,
+        "calls": 36,
+        "directions": 93,
+        "ctr": 0.039,
+        "leads": 3,
+        "delta_7d": {
+          "views_pct": -0.2,
+          "calls_pct": -0.27
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 285
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_011_dr_sameer_dentist_bangalore": {
+      "merchant_id": "m_011_dr_sameer_dentist_bangalore",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "Bright Smile Dental",
+        "city": "Bangalore",
+        "locality": "Indiranagar",
+        "place_id": "ChIJ_INDIRANAGAR_DENTISTS_011",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "kn"
+        ],
+        "owner_first_name": "Dr. Sameer",
+        "established_year": 2013
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_remaining": 0,
+        "days_since_expiry": 28
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 4792,
+        "calls": 55,
+        "directions": 138,
+        "ctr": 0.046,
+        "leads": 27,
+        "delta_7d": {
+          "views_pct": -0.2,
+          "calls_pct": 0.16
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1905
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_009_apollo_pharmacy_jaipur": {
+      "merchant_id": "m_009_apollo_pharmacy_jaipur",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Apollo Health Plus Pharmacy",
+        "city": "Jaipur",
+        "locality": "Malviya Nagar",
+        "place_id": "ChIJ_MALVIYA_PHARMACY_009",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Ramesh",
+        "established_year": 2016
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 60
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 1850,
+        "calls": 38,
+        "directions": 95,
+        "ctr": 0.045,
+        "leads": 24,
+        "delta_7d": {
+          "views_pct": 0.06,
+          "calls_pct": 0.08
+        }
+      },
+      "offers": [
+        {
+          "id": "o_apollo_001",
+          "title": "Free Home Delivery > ₹499",
+          "status": "active",
+          "started": "2026-01-01"
+        },
+        {
+          "id": "o_apollo_002",
+          "title": "Senior Citizen 15% OFF",
+          "status": "active",
+          "started": "2026-01-01"
+        }
+      ],
+      "conversation_history": [
+        {
+          "ts": "2026-04-24T08:00:00Z",
+          "from": "vera",
+          "body": "Heads up: voluntary recall on atorvastatin batches X/Y by Mfr Z. Want the customer list filtered for that molecule?",
+          "engagement": "merchant_replied"
+        },
+        {
+          "ts": "2026-04-24T08:30:00Z",
+          "from": "merchant",
+          "body": "Yes send me the list please",
+          "engagement": "intent_action"
+        }
+      ],
+      "customer_aggregate": {
+        "total_unique_ytd": 1820,
+        "repeat_customer_pct": 0.68,
+        "chronic_rx_count": 240
+      },
+      "signals": [
+        "above_peer_calls",
+        "compliance_aware",
+        "high_repeat_rate"
+      ],
+      "review_themes": [
+        {
+          "theme": "delivery_speed",
+          "sentiment": "pos",
+          "occurrences_30d": 11
+        },
+        {
+          "theme": "medicine_availability",
+          "sentiment": "pos",
+          "occurrences_30d": 8
+        }
+      ]
+    },
+    "m_028_karim_restaurant_chennai": {
+      "merchant_id": "m_028_karim_restaurant_chennai",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Kabab Junction",
+        "city": "Chennai",
+        "locality": "Anna Nagar",
+        "place_id": "ChIJ_ANNA_NAGAR_RESTAURANTS_028",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi",
+          "ta"
+        ],
+        "owner_first_name": "Karim",
+        "established_year": 2015
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_remaining": 0,
+        "days_since_expiry": 7
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5251,
+        "calls": 54,
+        "directions": 137,
+        "ctr": 0.041,
+        "leads": 19,
+        "delta_7d": {
+          "views_pct": -0.05,
+          "calls_pct": 0.1
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 198
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_015_dr_priya_dentist_chandigarh": {
+      "merchant_id": "m_015_dr_priya_dentist_chandigarh",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "Family Dental Centre",
+        "city": "Chandigarh",
+        "locality": "Sector 22",
+        "place_id": "ChIJ_SECTOR_22_DENTISTS_015",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Dr. Priya",
+        "established_year": 2021
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 239,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5908,
+        "calls": 10,
+        "directions": 20,
+        "ctr": 0.055,
+        "leads": 0,
+        "delta_7d": {
+          "views_pct": 0.26,
+          "calls_pct": 0.04
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1417
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_031_suresh_restaurant_jaipur": {
+      "merchant_id": "m_031_suresh_restaurant_jaipur",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Madras Express",
+        "city": "Jaipur",
+        "locality": "Vaishali Nagar",
+        "place_id": "ChIJ_VAISHALI_NAGAR_RESTAURANTS_031",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Suresh",
+        "established_year": 2011
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 10,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2467,
+        "calls": 18,
+        "directions": 50,
+        "ctr": 0.016,
+        "leads": 5,
+        "delta_7d": {
+          "views_pct": -0.2,
+          "calls_pct": -0.18
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 400
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_004_glamour_salon_pune": {
+      "merchant_id": "m_004_glamour_salon_pune",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Glamour Lounge Spa & Salon",
+        "city": "Pune",
+        "locality": "Aundh",
+        "place_id": "ChIJ_AUNDH_SALON_004",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "mr"
+        ],
+        "owner_first_name": "Anjali",
+        "established_year": 2021
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_since_expiry": 38
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 1200,
+        "calls": 8,
+        "directions": 22,
+        "ctr": 0.022,
+        "leads": 3,
+        "delta_7d": {
+          "views_pct": -0.12,
+          "calls_pct": -0.3,
+          "ctr_pct": -0.04
+        }
+      },
+      "offers": [],
+      "conversation_history": [
+        {
+          "ts": "2026-03-19T14:00:00Z",
+          "from": "vera",
+          "body": "Subscription expired. Profile maintenance paused...",
+          "engagement": "merchant_no_reply"
+        }
+      ],
+      "customer_aggregate": {
+        "total_unique_ytd": 380,
+        "lapsed_90d_plus": 180,
+        "retention_3mo_pct": 0.32
+      },
+      "signals": [
+        "winback_eligible",
+        "perf_dip_post_expiry",
+        "dormant_with_vera_38d"
+      ],
+      "review_themes": []
+    },
+    "m_032_mukesh_restaurant_pune": {
+      "merchant_id": "m_032_mukesh_restaurant_pune",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "Pizza Spot",
+        "city": "Pune",
+        "locality": "Aundh",
+        "place_id": "ChIJ_AUNDH_RESTAURANTS_032",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Mukesh",
+        "established_year": 2010
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 90,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 787,
+        "calls": 5,
+        "directions": 13,
+        "ctr": 0.053,
+        "leads": 0,
+        "delta_7d": {
+          "views_pct": 0.14,
+          "calls_pct": -0.24
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 889
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_012_dr_karthik_dentist_mumbai": {
+      "merchant_id": "m_012_dr_karthik_dentist_mumbai",
+      "category_slug": "dentists",
+      "identity": {
+        "name": "Apex Dental Care",
+        "city": "Mumbai",
+        "locality": "Lower Parel",
+        "place_id": "ChIJ_LOWER_PAREL_DENTISTS_012",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "mr"
+        ],
+        "owner_first_name": "Dr. Karthik",
+        "established_year": 2022
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 257,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 1381,
+        "calls": 16,
+        "directions": 56,
+        "ctr": 0.036,
+        "leads": 5,
+        "delta_7d": {
+          "views_pct": -0.25,
+          "calls_pct": -0.06
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1505
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_019_karim_salon_lucknow": {
+      "merchant_id": "m_019_karim_salon_lucknow",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Karim's Salon",
+        "city": "Lucknow",
+        "locality": "Alambagh",
+        "place_id": "ChIJ_ALAMBAGH_SALONS_019",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Karim",
+        "established_year": 2013
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 9,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 756,
+        "calls": 2,
+        "directions": 31,
+        "ctr": 0.038,
+        "leads": 1,
+        "delta_7d": {
+          "views_pct": 0.26,
+          "calls_pct": 0.23
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1509
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_007_powerhouse_gym_bangalore": {
+      "merchant_id": "m_007_powerhouse_gym_bangalore",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "PowerHouse Fitness",
+        "city": "Bangalore",
+        "locality": "HSR Layout",
+        "place_id": "ChIJ_HSR_GYM_007",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "kn"
+        ],
+        "owner_first_name": "Karthik",
+        "established_year": 2020
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 95
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 1480,
+        "calls": 22,
+        "directions": 48,
+        "ctr": 0.052,
+        "leads": 14,
+        "delta_7d": {
+          "views_pct": -0.3,
+          "calls_pct": -0.35
+        }
+      },
+      "offers": [
+        {
+          "id": "o_powerhouse_001",
+          "title": "3 FREE Trial Classes",
+          "status": "active",
+          "started": "2026-01-01"
+        }
+      ],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_active_members": 245,
+        "monthly_churn_pct": 0.1,
+        "trial_to_paid_pct": 0.28
+      },
+      "signals": [
+        "seasonal_dip_apr_may",
+        "above_peer_ctr",
+        "no_recent_post"
+      ],
+      "review_themes": [
+        {
+          "theme": "equipment_quality",
+          "sentiment": "pos",
+          "occurrences_30d": 7
+        },
+        {
+          "theme": "morning_crowd",
+          "sentiment": "neg",
+          "occurrences_30d": 4
+        }
+      ]
+    },
+    "m_022_renu_salon_ahmedabad": {
+      "merchant_id": "m_022_renu_salon_ahmedabad",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Beauty Lounge by Renu",
+        "city": "Ahmedabad",
+        "locality": "Thaltej",
+        "place_id": "ChIJ_THALTEJ_SALONS_022",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Renu",
+        "established_year": 2015
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_remaining": 0,
+        "days_since_expiry": 88
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 3135,
+        "calls": 14,
+        "directions": 32,
+        "ctr": 0.041,
+        "leads": 13,
+        "delta_7d": {
+          "views_pct": -0.26,
+          "calls_pct": 0.15
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 417
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_005_pizzajunction_restaurant_delhi": {
+      "merchant_id": "m_005_pizzajunction_restaurant_delhi",
+      "category_slug": "restaurants",
+      "identity": {
+        "name": "SK Pizza Junction",
+        "city": "Delhi",
+        "locality": "Sant Nagar",
+        "place_id": "ChIJ_SANTNAGAR_RESTAURANT_005",
+        "verified": false,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Suresh",
+        "established_year": 2022
+      },
+      "subscription": {
+        "status": "trial",
+        "plan": "Trial",
+        "days_remaining": 7
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 2200,
+        "calls": 12,
+        "directions": 38,
+        "ctr": 0.02,
+        "leads": 4,
+        "delta_7d": {
+          "views_pct": 0.08,
+          "calls_pct": 0.1
+        }
+      },
+      "offers": [
+        {
+          "id": "o_skpz_001",
+          "title": "Buy 1 Pizza Get 1 Free (Tue-Thu)",
+          "status": "active",
+          "started": "2026-04-15"
+        }
+      ],
+      "conversation_history": [
+        {
+          "ts": "2026-04-25T18:00:00Z",
+          "from": "vera",
+          "body": "Quick check — IPL match nights driving any extra footfall?",
+          "engagement": "merchant_no_reply"
+        }
+      ],
+      "customer_aggregate": {
+        "total_unique_ytd": 0,
+        "delivery_orders_30d": 180,
+        "dine_in_orders_30d": 95
+      },
+      "signals": [
+        "new_merchant",
+        "trial_ending_soon",
+        "ipl_eligible_locality"
+      ],
+      "review_themes": [
+        {
+          "theme": "delivery_late",
+          "sentiment": "neg",
+          "occurrences_30d": 4
+        },
+        {
+          "theme": "pizza_quality",
+          "sentiment": "pos",
+          "occurrences_30d": 8
+        }
+      ]
+    },
+    "m_048_vinod_pharmacie_mumbai": {
+      "merchant_id": "m_048_vinod_pharmacie_mumbai",
+      "category_slug": "pharmacies",
+      "identity": {
+        "name": "Family Health Pharmacy",
+        "city": "Mumbai",
+        "locality": "Borivali",
+        "place_id": "ChIJ_BORIVALI_PHARMACIES_048",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "mr"
+        ],
+        "owner_first_name": "Vinod",
+        "established_year": 2011
+      },
+      "subscription": {
+        "status": "trial",
+        "plan": "Trial",
+        "days_remaining": 5,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5870,
+        "calls": 12,
+        "directions": 42,
+        "ctr": 0.019,
+        "leads": 3,
+        "delta_7d": {
+          "views_pct": -0.1,
+          "calls_pct": 0.18
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 222
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_037_pooja_gym_bangalore": {
+      "merchant_id": "m_037_pooja_gym_bangalore",
+      "category_slug": "gyms",
+      "identity": {
+        "name": "Bend & Burn",
+        "city": "Bangalore",
+        "locality": "Koramangala",
+        "place_id": "ChIJ_KORAMANGALA_GYMS_037",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi",
+          "kn"
+        ],
+        "owner_first_name": "Pooja",
+        "established_year": 2019
+      },
+      "subscription": {
+        "status": "active",
+        "plan": "Pro",
+        "days_remaining": 162,
+        "days_since_expiry": null
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 5934,
+        "calls": 65,
+        "directions": 148,
+        "ctr": 0.042,
+        "leads": 31,
+        "delta_7d": {
+          "views_pct": -0.07,
+          "calls_pct": 0.06
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 387
+      },
+      "signals": [],
+      "review_themes": []
+    },
+    "m_021_paras_salon_chandigarh": {
+      "merchant_id": "m_021_paras_salon_chandigarh",
+      "category_slug": "salons",
+      "identity": {
+        "name": "Paras Hair & Beauty",
+        "city": "Chandigarh",
+        "locality": "Panchkula",
+        "place_id": "ChIJ_PANCHKULA_SALONS_021",
+        "verified": true,
+        "languages": [
+          "en",
+          "hi"
+        ],
+        "owner_first_name": "Paras",
+        "established_year": 2010
+      },
+      "subscription": {
+        "status": "expired",
+        "plan": "Pro",
+        "days_remaining": 0,
+        "days_since_expiry": 73
+      },
+      "performance": {
+        "window_days": 30,
+        "views": 4171,
+        "calls": 31,
+        "directions": 79,
+        "ctr": 0.026,
+        "leads": 20,
+        "delta_7d": {
+          "views_pct": 0.18,
+          "calls_pct": -0.27
+        }
+      },
+      "offers": [],
+      "conversation_history": [],
+      "customer_aggregate": {
+        "total_unique_ytd": 1918
+      },
+      "signals": [],
+      "review_themes": []
+    }
+  },
+  "customers": {
+    "c_180_diya_for_m_045_vinod_pharmacie_mumbai": {
+      "customer_id": "c_180_diya_for_m_045_vinod_pharmacie_mumbai",
+      "merchant_id": "m_045_vinod_pharmacie_mumbai",
+      "identity": {
+        "name": "Diya",
+        "phone_redacted": "<phone>",
+        "language_pref": "en",
+        "age_band": "20-25"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 1,
+        "services_received": [],
+        "lifetime_value": 252
+      },
+      "state": "active",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": false
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_160_kavya_for_m_040_karan_gym_ahmedabad": {
+      "customer_id": "c_160_kavya_for_m_040_karan_gym_ahmedabad",
+      "merchant_id": "m_040_karan_gym_ahmedabad",
+      "identity": {
+        "name": "Kavya",
+        "phone_redacted": "<phone>",
+        "language_pref": "hi-en mix",
+        "age_band": "50-65"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 6,
+        "services_received": [],
+        "lifetime_value": 6744
+      },
+      "state": "active",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_149_myra_for_m_038_pooja_gym_chandigarh": {
+      "customer_id": "c_149_myra_for_m_038_pooja_gym_chandigarh",
+      "merchant_id": "m_038_pooja_gym_chandigarh",
+      "identity": {
+        "name": "Myra",
+        "phone_redacted": "<phone>",
+        "language_pref": "en",
+        "age_band": "20-25"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 5,
+        "services_received": [],
+        "lifetime_value": 5610
+      },
+      "state": "lapsed_soft",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_026_saanvi_for_m_004_glamour_salon_pune": {
+      "customer_id": "c_026_saanvi_for_m_004_glamour_salon_pune",
+      "merchant_id": "m_004_glamour_salon_pune",
+      "identity": {
+        "name": "Saanvi",
+        "phone_redacted": "<phone>",
+        "language_pref": "hi-en mix",
+        "age_band": "20-25"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 9,
+        "services_received": [],
+        "lifetime_value": 3510
+      },
+      "state": "active",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_122_anika_for_m_031_suresh_restaurant_jaipur": {
+      "customer_id": "c_122_anika_for_m_031_suresh_restaurant_jaipur",
+      "merchant_id": "m_031_suresh_restaurant_jaipur",
+      "identity": {
+        "name": "Anika",
+        "phone_redacted": "<phone>",
+        "language_pref": "hi-en mix",
+        "age_band": "30-40"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 3,
+        "services_received": [],
+        "lifetime_value": 3135
+      },
+      "state": "lapsed_soft",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_008_dipti_for_m006": {
+      "customer_id": "c_008_dipti_for_m006",
+      "merchant_id": "m_006_southindiancafe_restaurant_bangalore",
+      "identity": {
+        "name": "Dipti",
+        "phone_redacted": "<phone>",
+        "language_pref": "english",
+        "age_band": "30-40"
+      },
+      "relationship": {
+        "first_visit": "2025-12-18",
+        "last_visit": "2026-01-05",
+        "visits_total": 2,
+        "services_received": [
+          "family_brunch",
+          "delivery_dosa_combo"
+        ],
+        "lifetime_value": 1280
+      },
+      "state": "lapsed_soft",
+      "preferences": {
+        "preferred_slots": "sunday_brunch",
+        "channel": "whatsapp",
+        "reminder_opt_in": true,
+        "family_size": 4
+      },
+      "consent": {
+        "opted_in_at": "2025-12-18",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_163_aryan_for_m_041_akash_gym_hyderabad": {
+      "customer_id": "c_163_aryan_for_m_041_akash_gym_hyderabad",
+      "merchant_id": "m_041_akash_gym_hyderabad",
+      "identity": {
+        "name": "Aryan",
+        "phone_redacted": "<phone>",
+        "language_pref": "en",
+        "age_band": "30-40"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 3,
+        "services_received": [],
+        "lifetime_value": 2688
+      },
+      "state": "active",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_086_ananya_for_m_022_renu_salon_ahmedabad": {
+      "customer_id": "c_086_ananya_for_m_022_renu_salon_ahmedabad",
+      "merchant_id": "m_022_renu_salon_ahmedabad",
+      "identity": {
+        "name": "Ananya",
+        "phone_redacted": "<phone>",
+        "language_pref": "hi",
+        "age_band": "40-50"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 6,
+        "services_received": [],
+        "lifetime_value": 5922
+      },
+      "state": "active",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_001_priya_for_m001": {
+      "customer_id": "c_001_priya_for_m001",
+      "merchant_id": "m_001_drmeera_dentist_delhi",
+      "identity": {
+        "name": "Priya",
+        "phone_redacted": "<phone>",
+        "language_pref": "hi-en mix",
+        "age_band": "25-35"
+      },
+      "relationship": {
+        "first_visit": "2025-11-04",
+        "last_visit": "2026-05-12",
+        "visits_total": 4,
+        "services_received": [
+          "cleaning",
+          "cleaning",
+          "whitening",
+          "cleaning"
+        ],
+        "lifetime_value": 1696
+      },
+      "state": "lapsed_soft",
+      "preferences": {
+        "preferred_slots": "weekday_evening",
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-11-04",
+        "scope": [
+          "recall_reminders",
+          "appointment_reminders"
+        ]
+      }
+    },
+    "c_056_anika_for_m_014_dr_asha_dentist_chandigarh": {
+      "customer_id": "c_056_anika_for_m_014_dr_asha_dentist_chandigarh",
+      "merchant_id": "m_014_dr_asha_dentist_chandigarh",
+      "identity": {
+        "name": "Anika",
+        "phone_redacted": "<phone>",
+        "language_pref": "hi-en mix",
+        "age_band": "40-50"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 8,
+        "services_received": [],
+        "lifetime_value": 2960
+      },
+      "state": "active",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_199_saanvi_for_m_050_bharti_pharmacie_chennai": {
+      "customer_id": "c_199_saanvi_for_m_050_bharti_pharmacie_chennai",
+      "merchant_id": "m_050_bharti_pharmacie_chennai",
+      "identity": {
+        "name": "Saanvi",
+        "phone_redacted": "<phone>",
+        "language_pref": "en",
+        "age_band": "50-65"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 2,
+        "services_received": [],
+        "lifetime_value": 1642
+      },
+      "state": "new",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    },
+    "c_148_kavya_for_m_037_pooja_gym_bangalore": {
+      "customer_id": "c_148_kavya_for_m_037_pooja_gym_bangalore",
+      "merchant_id": "m_037_pooja_gym_bangalore",
+      "identity": {
+        "name": "Kavya",
+        "phone_redacted": "<phone>",
+        "language_pref": "en",
+        "age_band": "30-40"
+      },
+      "relationship": {
+        "first_visit": "2025-09-01",
+        "last_visit": "2026-04-01",
+        "visits_total": 8,
+        "services_received": [],
+        "lifetime_value": 8688
+      },
+      "state": "active",
+      "preferences": {
+        "channel": "whatsapp",
+        "reminder_opt_in": true
+      },
+      "consent": {
+        "opted_in_at": "2025-09-01",
+        "scope": [
+          "promotional_offers"
+        ]
+      }
+    }
+  },
+  "triggers": [
+    {
+      "id": "nv_01",
+      "kind": "rating_drop_alert",
+      "scope": "merchant",
+      "merchant_id": "m_016_dr_rajan_dentist_pune",
+      "customer_id": null,
+      "payload": {
+        "rating_before": 4.6,
+        "rating_now": 4.3,
+        "window_days": 10,
+        "new_reviews": 9,
+        "new_1_2_star": 4,
+        "recurring_words": [
+          "waiting time",
+          "billing"
+        ],
+        "latest_low_review_date": "2026-04-25"
+      },
+      "urgency": 4,
+      "source": "internal",
+      "suppression_key": "rating_drop_alert:m_016_dr_rajan_dentist_pune:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T14:10:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_02",
+      "kind": "bulk_order_enquiry",
+      "scope": "merchant",
+      "merchant_id": "m_029_anand_restaurant_chandigarh",
+      "customer_id": null,
+      "payload": {
+        "enquiry_id": "BQ-CHD-7731",
+        "company": "Quarkline Infotech, IT Park",
+        "contact_role": "admin manager",
+        "event_date": "2026-05-02",
+        "headcount": 120,
+        "budget_per_head_inr": 180,
+        "items_requested": [
+          "masala chai",
+          "samosa",
+          "veg sandwich",
+          "cookies"
+        ],
+        "delivery_time": "16:00",
+        "respond_by": "2026-04-27T18:00:00Z"
+      },
+      "urgency": 4,
+      "source": "internal",
+      "suppression_key": "bulk_order_enquiry:m_029_anand_restaurant_chandigarh:2026-04-26",
+      "expires_at": "2026-04-27T18:00:00Z",
+      "_now": "2026-04-26T11:10:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_03",
+      "kind": "reservation_no_show_rate_high",
+      "scope": "merchant",
+      "merchant_id": "m_006_southindiancafe_restaurant_bangalore",
+      "customer_id": null,
+      "payload": {
+        "window_days": 14,
+        "reservations": 141,
+        "no_shows": 31,
+        "no_show_rate": 0.22,
+        "city_peer_no_show_rate": 0.09,
+        "worst_slot": "Sat-Sun 13:00-14:30",
+        "deposit_enabled": false
+      },
+      "urgency": 3,
+      "source": "internal",
+      "suppression_key": "reservation_no_show_rate_high:m_006_southindiancafe_restaurant_bangalore:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T13:00:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_04",
+      "kind": "ops_ticket_update",
+      "scope": "merchant",
+      "merchant_id": "m_015_dr_priya_dentist_chandigarh",
+      "customer_id": null,
+      "payload": {
+        "placeholder": true
+      },
+      "urgency": 1,
+      "source": "internal",
+      "suppression_key": "ops_ticket_update:m_015_dr_priya_dentist_chandigarh:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T15:30:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_05",
+      "kind": "scheduled_power_cut",
+      "scope": "merchant",
+      "merchant_id": "m_024_geeta_salon_bangalore",
+      "customer_id": null,
+      "payload": {
+        "utility": "BESCOM",
+        "date": "2026-04-28",
+        "from": "10:00",
+        "to": "16:00",
+        "feeder": "F-12 Koramangala",
+        "notice_source": "BESCOM planned maintenance list",
+        "bookings_in_window": 7
+      },
+      "urgency": 3,
+      "source": "external",
+      "suppression_key": "scheduled_power_cut:m_024_geeta_salon_bangalore:2026-04-26",
+      "expires_at": "2026-04-28T16:00:00Z",
+      "_now": "2026-04-26T11:20:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_06",
+      "kind": "account_manager_note",
+      "scope": "merchant",
+      "merchant_id": "m_035_manisha_gym_delhi",
+      "customer_id": null,
+      "payload": {
+        "placeholder": true
+      },
+      "urgency": 2,
+      "source": "internal",
+      "suppression_key": "account_manager_note:m_035_manisha_gym_delhi:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T15:20:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_07",
+      "kind": "membership_freeze_spike",
+      "scope": "merchant",
+      "merchant_id": "m_007_powerhouse_gym_bangalore",
+      "customer_id": null,
+      "payload": {
+        "freeze_requests_7d": 14,
+        "avg_weekly_freeze_requests": 3,
+        "top_reasons": {
+          "travel_summer_vacation": 8,
+          "exams": 3,
+          "injury": 2,
+          "other": 1
+        },
+        "avg_freeze_length_days": 24,
+        "active_members": 412
+      },
+      "urgency": 2,
+      "source": "internal",
+      "suppression_key": "membership_freeze_spike:m_007_powerhouse_gym_bangalore:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T11:40:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_08",
+      "kind": "payout_settlement_delayed",
+      "scope": "merchant",
+      "merchant_id": "m_032_mukesh_restaurant_pune",
+      "customer_id": null,
+      "payload": {
+        "settlement_id": "STL-PN-2604-88213",
+        "amount_inr": 48250,
+        "orders_covered": 212,
+        "original_settlement_date": "2026-04-24",
+        "revised_expected_date": "2026-04-29",
+        "delay_reason": "bank_holiday_reconciliation",
+        "support_ticket": "MP-TKT-551902"
+      },
+      "urgency": 4,
+      "source": "internal",
+      "suppression_key": "payout_settlement_delayed:m_032_mukesh_restaurant_pune:2026-04-26",
+      "expires_at": "2026-04-30T00:00:00Z",
+      "_now": "2026-04-26T10:35:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_09",
+      "kind": "platform_feature_unlocked",
+      "scope": "merchant",
+      "merchant_id": "m_036_roshni_gym_ahmedabad",
+      "customer_id": null,
+      "payload": {
+        "feature": "class_slot_booking_widget",
+        "eligible_since": "2026-04-26",
+        "plan_required": "Pro",
+        "peer_adoption_pct": 38,
+        "peer_bookings_uplift_pct_median": 17,
+        "setup_minutes": 10
+      },
+      "urgency": 1,
+      "source": "internal",
+      "suppression_key": "platform_feature_unlocked:m_036_roshni_gym_ahmedabad:2026-04-26",
+      "expires_at": "2026-05-10T00:00:00Z",
+      "_now": "2026-04-26T12:30:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_10",
+      "kind": "menu_price_mismatch",
+      "scope": "merchant",
+      "merchant_id": "m_034_suresh_restaurant_delhi",
+      "customer_id": null,
+      "payload": {
+        "items": [
+          {
+            "name": "Masala Dosa",
+            "listed_price_inr": 120,
+            "billed_price_inr": 140
+          },
+          {
+            "name": "Filter Coffee",
+            "listed_price_inr": 40,
+            "billed_price_inr": 50
+          }
+        ],
+        "customer_complaints_7d": 4,
+        "listing_last_updated": "2026-01-18",
+        "detected_by": "bill_upload_audit"
+      },
+      "urgency": 3,
+      "source": "internal",
+      "suppression_key": "menu_price_mismatch:m_034_suresh_restaurant_delhi:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T11:30:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_11",
+      "kind": "listing_audit_pending",
+      "scope": "merchant",
+      "merchant_id": "m_021_paras_salon_chandigarh",
+      "customer_id": null,
+      "payload": {
+        "placeholder": true
+      },
+      "urgency": 1,
+      "source": "internal",
+      "suppression_key": "listing_audit_pending:m_021_paras_salon_chandigarh:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T15:10:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_12",
+      "kind": "competitor_offer_launched",
+      "scope": "merchant",
+      "merchant_id": "m_039_karan_gym_jaipur",
+      "customer_id": null,
+      "payload": {
+        "competitor_name": "FitZone 24x7",
+        "distance_km": 0.8,
+        "offer": "3 months @ ₹2,999 + free diet plan",
+        "offer_valid_till": "2026-05-15",
+        "seen_on": "magicpin + flyers",
+        "merchant_comparable_plan_inr": 4200
+      },
+      "urgency": 3,
+      "source": "external",
+      "suppression_key": "competitor_offer_launched:m_039_karan_gym_jaipur:2026-04-26",
+      "expires_at": "2026-05-15T00:00:00Z",
+      "_now": "2026-04-26T14:20:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_13",
+      "kind": "private_feedback_negative",
+      "scope": "customer",
+      "merchant_id": "m_031_suresh_restaurant_jaipur",
+      "customer_id": "c_122_anika_for_m_031_suresh_restaurant_jaipur",
+      "payload": {
+        "order_id": "MJ-JP-90412",
+        "order_date": "2026-04-25",
+        "rating": 2,
+        "channel": "post_order_survey",
+        "feedback_text": "Dosa came cold and delivery took 55 minutes.",
+        "items": [
+          "Masala Dosa",
+          "Filter Coffee"
+        ],
+        "order_value_inr": 260
+      },
+      "urgency": 3,
+      "source": "internal",
+      "suppression_key": "private_feedback_negative:m_031_suresh_restaurant_jaipur:2026-04-26",
+      "expires_at": "2026-04-29T00:00:00Z",
+      "_now": "2026-04-26T15:00:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_14",
+      "kind": "cold_chain_breach",
+      "scope": "merchant",
+      "merchant_id": "m_009_apollo_pharmacy_jaipur",
+      "customer_id": null,
+      "payload": {
+        "device": "Fridge-2 sensor",
+        "recorded_max_temp_c": 11.4,
+        "safe_range_c": "2-8",
+        "breach_duration_min": 47,
+        "breach_start": "2026-04-26T02:10:00Z",
+        "products_in_unit": {
+          "insulin_pens": 22,
+          "vaccines": 9,
+          "eye_drops": 14
+        },
+        "cause_guess": "power_cut_inverter_not_covering_fridge"
+      },
+      "urgency": 5,
+      "source": "internal",
+      "suppression_key": "cold_chain_breach:m_009_apollo_pharmacy_jaipur:2026-04-26",
+      "expires_at": "2026-04-27T12:00:00Z",
+      "_now": "2026-04-26T12:40:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_15",
+      "kind": "customer_birthday_upcoming",
+      "scope": "customer",
+      "merchant_id": "m_004_glamour_salon_pune",
+      "customer_id": "c_026_saanvi_for_m_004_glamour_salon_pune",
+      "payload": {
+        "birthday": "2026-04-29",
+        "last_visit": "2026-03-14",
+        "last_services": [
+          "hair spa",
+          "eyebrow threading"
+        ],
+        "loyalty_tier": "silver",
+        "avg_ticket_inr": 1350
+      },
+      "urgency": 2,
+      "source": "internal",
+      "suppression_key": "customer_birthday_upcoming:m_004_glamour_salon_pune:2026-04-26",
+      "expires_at": "2026-04-29T23:59:00Z",
+      "_now": "2026-04-26T14:30:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_16",
+      "kind": "prescription_upload_pending",
+      "scope": "customer",
+      "merchant_id": "m_050_bharti_pharmacie_chennai",
+      "customer_id": "c_199_saanvi_for_m_050_bharti_pharmacie_chennai",
+      "payload": {
+        "order_id": "ORD-CHN-44187",
+        "cart_created_at": "2026-04-26T08:50:00Z",
+        "items_needing_rx": [
+          "Amoxicillin 500mg",
+          "Pantoprazole 40mg"
+        ],
+        "otc_items": [
+          "Vitamin C 500mg"
+        ],
+        "cart_value_inr": 612,
+        "hold_expires_at": "2026-04-27T08:50:00Z"
+      },
+      "urgency": 4,
+      "source": "internal",
+      "suppression_key": "prescription_upload_pending:m_050_bharti_pharmacie_chennai:2026-04-26",
+      "expires_at": "2026-04-27T08:50:00Z",
+      "_now": "2026-04-26T14:40:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_17",
+      "kind": "delivery_radius_reduced",
+      "scope": "merchant",
+      "merchant_id": "m_028_karim_restaurant_chennai",
+      "customer_id": null,
+      "payload": {
+        "previous_radius_km": 7,
+        "new_radius_km": 4,
+        "effective_from": "2026-04-26T17:00:00Z",
+        "expected_until": "2026-05-03",
+        "reason": "rider_shortage_zone_south",
+        "share_of_last_30d_orders_beyond_4km": 0.31
+      },
+      "urgency": 4,
+      "source": "internal",
+      "suppression_key": "delivery_radius_reduced:m_028_karim_restaurant_chennai:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T13:40:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_18",
+      "kind": "upi_qr_deactivated",
+      "scope": "merchant",
+      "merchant_id": "m_049_komal_pharmacie_lucknow",
+      "customer_id": null,
+      "payload": {
+        "vpa_masked": "dailycare****@ybl",
+        "deactivated_at": "2026-04-26T06:05:00Z",
+        "reason": "kyc_document_expired",
+        "failed_payment_attempts_24h": 17,
+        "value_of_failed_attempts_inr": 6240,
+        "reactivation_steps": [
+          "upload_updated_pan",
+          "video_kyc"
+        ]
+      },
+      "urgency": 5,
+      "source": "internal",
+      "suppression_key": "upi_qr_deactivated:m_049_komal_pharmacie_lucknow:2026-04-26",
+      "expires_at": "2026-04-29T00:00:00Z",
+      "_now": "2026-04-26T11:15:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_19",
+      "kind": "equipment_amc_expiring",
+      "scope": "merchant",
+      "merchant_id": "m_002_bharat_dentist_mumbai",
+      "customer_id": null,
+      "payload": {
+        "equipment": "Class B autoclave",
+        "vendor": "Sterimed Services",
+        "amc_expires_on": "2026-05-10",
+        "last_service_date": "2025-11-12",
+        "renewal_quote_inr": 14500,
+        "validation_test_due": "spore_test"
+      },
+      "urgency": 2,
+      "source": "internal",
+      "suppression_key": "equipment_amc_expiring:m_002_bharat_dentist_mumbai:2026-04-26",
+      "expires_at": "2026-05-10T00:00:00Z",
+      "_now": "2026-04-26T13:10:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_20",
+      "kind": "missed_sessions_streak",
+      "scope": "customer",
+      "merchant_id": "m_041_akash_gym_hyderabad",
+      "customer_id": "c_163_aryan_for_m_041_akash_gym_hyderabad",
+      "payload": {
+        "consecutive_days_missed": 9,
+        "usual_slot": "06:30",
+        "last_checkin": "2026-04-17",
+        "membership_ends": "2026-06-15",
+        "plan": "6-month strength",
+        "trainer_assigned": "Sai"
+      },
+      "urgency": 2,
+      "source": "internal",
+      "suppression_key": "missed_sessions_streak:m_041_akash_gym_hyderabad:2026-04-26",
+      "expires_at": "2026-05-01T00:00:00Z",
+      "_now": "2026-04-26T14:50:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_21",
+      "kind": "social_mention_spike",
+      "scope": "merchant",
+      "merchant_id": "m_020_renu_salon_lucknow",
+      "customer_id": null,
+      "payload": {
+        "platform": "instagram",
+        "creator_handle": "@lucknowglamdiaries",
+        "followers": 86000,
+        "post_type": "reel",
+        "posted_at": "2026-04-25T14:00:00Z",
+        "views": 142000,
+        "merchant_tagged": true,
+        "service_featured": "keratin smoothening",
+        "profile_visits_from_reel_24h": 930
+      },
+      "urgency": 3,
+      "source": "external",
+      "suppression_key": "social_mention_spike:m_020_renu_salon_lucknow:2026-04-26",
+      "expires_at": "2026-04-29T00:00:00Z",
+      "_now": "2026-04-26T13:30:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_22",
+      "kind": "blood_donation_camp_invite",
+      "scope": "merchant",
+      "merchant_id": "m_013_dr_neha_dentist_jaipur",
+      "customer_id": null,
+      "payload": {
+        "organiser": "Rotary Club Jaipur Midtown",
+        "camp_date": "2026-05-04",
+        "venue": "Community hall, Malviya Nagar",
+        "ask": "co-host a free dental check-up desk",
+        "expected_footfall": 300,
+        "rsvp_by": "2026-04-30"
+      },
+      "urgency": 1,
+      "source": "external",
+      "suppression_key": "blood_donation_camp_invite:m_013_dr_neha_dentist_jaipur:2026-04-26",
+      "expires_at": "2026-04-30T23:59:00Z",
+      "_now": "2026-04-26T12:10:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_23",
+      "kind": "listing_photos_rejected",
+      "scope": "merchant",
+      "merchant_id": "m_017_dr_rajan_dentist_mumbai",
+      "customer_id": null,
+      "payload": {
+        "photos_submitted": 5,
+        "photos_rejected": 3,
+        "rejection_reason": "text_overlay_or_promo_banner",
+        "submitted_on": "2026-04-25",
+        "approved_photo_count_now": 4,
+        "category_median_photo_count": 14
+      },
+      "urgency": 2,
+      "source": "internal",
+      "suppression_key": "listing_photos_rejected:m_017_dr_rajan_dentist_mumbai:2026-04-26",
+      "expires_at": "2026-05-03T00:00:00Z",
+      "_now": "2026-04-26T11:00:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_24",
+      "kind": "municipal_water_cut",
+      "scope": "merchant",
+      "merchant_id": "m_047_anil_pharmacie_chandigarh",
+      "customer_id": null,
+      "payload": {
+        "authority": "MC Chandigarh",
+        "sectors": [
+          "Sector 22",
+          "Sector 35"
+        ],
+        "date": "2026-04-28",
+        "hours": "09:00-17:00",
+        "reason": "pipeline repair"
+      },
+      "urgency": 1,
+      "source": "external",
+      "suppression_key": "municipal_water_cut:m_047_anil_pharmacie_chandigarh:2026-04-26",
+      "expires_at": "2026-04-28T17:00:00Z",
+      "_now": "2026-04-26T13:20:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_25",
+      "kind": "staff_absence_bookings_at_risk",
+      "scope": "merchant",
+      "merchant_id": "m_003_studio11_salon_hyderabad",
+      "customer_id": null,
+      "payload": {
+        "staff_name": "Ravi",
+        "role": "senior stylist",
+        "absent_since": "2026-04-24",
+        "expected_return": "2026-04-29",
+        "bookings_affected": 11,
+        "affected_dates": [
+          "2026-04-27",
+          "2026-04-28"
+        ],
+        "services_booked": {
+          "haircut_men": 5,
+          "beard_styling": 3,
+          "hair_colour": 3
+        },
+        "other_stylists_free_slots": 6
+      },
+      "urgency": 4,
+      "source": "internal",
+      "suppression_key": "staff_absence_bookings_at_risk:m_003_studio11_salon_hyderabad:2026-04-26",
+      "expires_at": "2026-04-28T12:00:00Z",
+      "_now": "2026-04-26T10:45:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_26",
+      "kind": "inventory_near_expiry",
+      "scope": "merchant",
+      "merchant_id": "m_044_vinod_pharmacie_chennai",
+      "customer_id": null,
+      "payload": {
+        "window_days": 60,
+        "batches": [
+          {
+            "sku": "Azithromycin 500mg (strip of 3)",
+            "batch": "AZT2311B",
+            "expiry": "2026-05-31",
+            "units": 46,
+            "mrp_inr": 71
+          },
+          {
+            "sku": "ORS sachet 21g",
+            "batch": "ORS2402K",
+            "expiry": "2026-06-15",
+            "units": 180,
+            "mrp_inr": 22
+          },
+          {
+            "sku": "Cetirizine 10mg (strip of 10)",
+            "batch": "CTZ2310A",
+            "expiry": "2026-06-20",
+            "units": 64,
+            "mrp_inr": 18
+          }
+        ],
+        "total_stock_value_inr": 8394,
+        "distributor_return_window_closes": "2026-05-10"
+      },
+      "urgency": 3,
+      "source": "internal",
+      "suppression_key": "inventory_near_expiry:m_044_vinod_pharmacie_chennai:2026-04-26",
+      "expires_at": "2026-05-10T00:00:00Z",
+      "_now": "2026-04-26T10:40:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_27",
+      "kind": "bridal_enquiry_stalled",
+      "scope": "merchant",
+      "merchant_id": "m_022_renu_salon_ahmedabad",
+      "customer_id": null,
+      "payload": {
+        "open_enquiries": 5,
+        "oldest_enquiry_days": 9,
+        "packages_quoted": [
+          {
+            "package": "Bridal HD makeup + pre-bridal (3 sittings)",
+            "quote_inr": 24000
+          },
+          {
+            "package": "Engagement + mehendi look",
+            "quote_inr": 11500
+          }
+        ],
+        "wedding_dates_range": [
+          "2026-05-08",
+          "2026-06-14"
+        ],
+        "enquiries_with_no_reply_from_salon": 2
+      },
+      "urgency": 3,
+      "source": "internal",
+      "suppression_key": "bridal_enquiry_stalled:m_022_renu_salon_ahmedabad:2026-04-26",
+      "expires_at": "2026-05-01T00:00:00Z",
+      "_now": "2026-04-26T14:00:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_28",
+      "kind": "gst_return_due",
+      "scope": "merchant",
+      "merchant_id": "m_005_pizzajunction_restaurant_delhi",
+      "customer_id": null,
+      "payload": {
+        "return_type": "GSTR-3B",
+        "period": "2026-04",
+        "due_date": "2026-05-20",
+        "last_filed_period": "2026-02",
+        "late_fee_per_day_inr": 50,
+        "magicpin_tcs_collected_inr": 3120
+      },
+      "urgency": 2,
+      "source": "external",
+      "suppression_key": "gst_return_due:m_005_pizzajunction_restaurant_delhi:2026-04-26",
+      "expires_at": "2026-05-20T00:00:00Z",
+      "_now": "2026-04-26T12:20:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_29",
+      "kind": "unanswered_customer_question",
+      "scope": "merchant",
+      "merchant_id": "m_040_karan_gym_ahmedabad",
+      "customer_id": null,
+      "payload": {
+        "channel": "magicpin_chat",
+        "asked_at": "2026-04-25T04:20:00Z",
+        "hours_pending": 30,
+        "question_text": "Do you have a ladies-only batch in the morning? What is the fee for 3 months?",
+        "asker_first_name": "Hetal",
+        "similar_unanswered_last_30d": 4
+      },
+      "urgency": 3,
+      "source": "internal",
+      "suppression_key": "unanswered_customer_question:m_040_karan_gym_ahmedabad:2026-04-26",
+      "expires_at": "2026-04-28T00:00:00Z",
+      "_now": "2026-04-26T11:00:00Z",
+      "_src": "novel"
+    },
+    {
+      "id": "nv_30",
+      "kind": "school_summer_vacation_start",
+      "scope": "merchant",
+      "merchant_id": "m_011_dr_sameer_dentist_bangalore",
+      "customer_id": null,
+      "payload": {
+        "region": "Bengaluru Urban",
+        "board": "Karnataka State Board + most CBSE schools",
+        "vacation_from": "2026-04-28",
+        "vacation_to": "2026-05-29",
+        "source": "DSEL academic calendar 2025-26"
+      },
+      "urgency": 2,
+      "source": "external",
+      "suppression_key": "school_summer_vacation_start:m_011_dr_sameer_dentist_bangalore:2026-04-26",
+      "expires_at": "2026-05-10T00:00:00Z",
+      "_now": "2026-04-26T12:00:00Z",
+      "_src": "novel"
+    }
+  ]
+}
