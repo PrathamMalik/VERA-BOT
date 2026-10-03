@@ -72,3 +72,61 @@
 
 ## Model
 - **Gemini (free tier)** via `LLM_PROVIDER=gemini`, model **gemini-3.5-flash-lite** (updated): free tier allows 15 requests/min and 500/day, vs only 5/min and 20/day for plain Flash; our AI jobs are small (pick, one line, label), so Lite is enough. A per-minute limiter spends free calls on AI-first/Hybrid triggers first; any refused/slow call → rules-only fallback.
+
+---
+## Eval round 1 → strategy changes (measured, not guessed)
+Measured with `scripts/eval_real.py`: 40 triggers in real-test proportions (30 empty placeholders, 10 real-data), customer profiles, April clock, magicpin's own judge prompt on Gemini. Baseline **38.7/50** (real-data 41.9, placeholder 37.6). Weakest dimension: decision quality ("why now") 6.6/10.
+
+Root causes found: (1) message didn't match its trigger (empty triggers fell back to a generic weak-spots template); (2) real facts looked invented because their source was invisible; (3) mixed signals in one message; (4) trigger types that don't fit the business; (5) confrontational tone, language rule.
+
+Decisions (made by me after seeing the data):
+- **R1 Why-now first line** for every message, even when the trigger is empty.
+- **R2 Evidence must match the trigger** (review trigger → review data, competitor → how you stack up). If the matching evidence doesn't exist → skip. *(Updates #9/T25: an empty dip trigger with no dip in the data is now skipped instead of sending "nothing is dipping".)*
+- **R3 Every number shows its source** — "(magicpin dashboard)", "(magicpin data, last 30 days)", "(your customer records)", "Google reviews".
+- **R4 One story per message.**
+- **Strengths first** (updates #6): where you're already ahead of similar businesses, then 1–2 places to win more.
+- **Trigger-to-business fit rating** (dissociation 0–3): 0 native, 1 close analogue → map to the nearest intent (e.g. gym "chronic refill" → membership top-up), 2+ → skip (restraint).
+- **Quality floor, enforced**: name present, one CTA at the end, no internal labels; AI text that fails falls back to the rules text; rules text that fails → skip. *(A "must contain a number" rule was tested and did not predict scores — dropped.)*
+- **Ready drafts** kept as the backup rung: positive brand line from real data (review quote / "serving X since Y") + the merchant can send their own tagline, which is saved and reused.
+- Language rule for Hindi + a southern language: open — to revisit.
+
+## Eval round 2 (held-out check) → round 3
+Held-out result (40 unseen triggers): old 38.4 → new 40.3; messages < 30: 3 → 0. Split of the gain: ~+0.8 better messages on the same triggers, ~+1.1 from skipping triggers the old bot handled badly. Coverage 98% → 82%.
+- **Rule A kept:** trigger doesn't fit the business (dissociation ≥ 2) → skip.
+- **Rule B changed (my call):** dip trigger with nothing down → send, but worded as a *dip check with an all-clear* ("I ran a dip check — good news, nothing is down ✅ (views +8%, magicpin dashboard)") + one forward-looking step, so it never reads as contradicting the trigger.
+- **Round 3 — stay on the trigger's topic** (the judge's main remaining complaint): competitor → "what nearby customers comparing the two will see" (reviews, visibility, live offer); renewal → what the plan delivered + at most one step; festival / curious ask → include the merchant's own numbers; dentists' customer messages always carry the doctor's name. The #30 scheduled check-in rotation keeps the case-study format.
+
+## Category analysis → gyms
+Pooled all judged messages (5 runs, ~180 scores) by business type. Salons were the weakest with the old bot (36.1 held-out) and gained most from the new strategy (+3.5). **Gyms were flat in every run (~39.2–39.8) — the only category the fixes didn't reach.** Root cause found in magicpin's own data: the gym category's voice is `english_primary_some_hindi` (coach register) while our language rule sent gyms full Hinglish.
+- **Language follows the category's own code-mix rule** (gyms → English-primary).
+- **Gym voice layer:** one short coach line before the CTA on merchant-facing gym messages (no result promises — taboo).
+- **Gym KPIs:** members (active / this year) in the gym's own numbers; churn and trial-to-paid vs benchmark counted as strengths when better.
+- **Gym "chronic refill → membership top-up" mapping dropped** (judged forced in 3/3 runs) → skipped.
+
+## Performance triggers (by merchant)
+All weak perf messages sat in salons and gyms (28–36); dentists / pharmacies / restaurants steady at 40–43. Common flaw: two stories in one message.
+- **Seasonal dip → reassurance only:** "that's the season, not you — similar gyms are down X% too (magicpin data)" + one cost-saving step. No gap list.
+- **Big spike (≥10%) → celebrate + protect:** "great week — calls up 15% 🎉 (magicpin dashboard)" + one way to keep the momentum. No "extra calls only matter if they convert".
+- One emoji per message: the gym coach line drops its 💪 when the message already has an emoji.
+
+## Round 3 result → round 3.1
+Held-out: round 2 39.9 → round 3 41.1 (+1.2; same-trigger paired +1.7, 15 better / 14 same / 4 worse). Gyms 39.3 → 40.3 held-out (42.2 dev) — the gym fix worked. Biggest gains: gym seasonal dip 33→41, gym festival 34→43, dentist appointment 30→42.
+- **Dip check reworded again (my call: keep it, keep it positive):** the "nothing is down (+8%)" version scored 26 and 23 — the judge read weekly % it can't see as fabricated and "nothing went down" as contradicting the trigger. New version: "quick health check: your numbers are holding steady ✅ — 2,547 profile views, 22 calls in the last 30 days (magicpin dashboard). A good moment to grow from here:" + one step.
+- **Anti-overfitting for this round:** a new sealed FRESH set (seed 4242, 48 cases): 20 dataset triggers never used before, 20 remixed trigger↔merchant pairs, 8 trigger types only named in the brief (heatwave, local news, trend movement, scheduled check-in); each case gets its own clock. Aggregates only.
+
+## Round 3.1 → shipped (+ heatwave skip)
+- **Fresh-set check (48 new/remixed cases, seed 4242):** round 3.1 39.5 vs round 2 39.1 (paired +0.33, W/T/L 15/12/12) — within judge noise, never worse; gyms 38.2 → 39.8; held-out 41.5. Decision: **ship round 3.1** (Pratham, OK).
+- **Heatwave trigger with no weather data → skip.** Why: rule R2 (evidence must match the trigger). An empty heatwave scored 30–32 because the bot had to invent "a heatwave is on". With a real temperature/city it still sends the heat-day plan.
+- `baseline/` updated to this version for future comparisons.
+
+## Round 4: new trigger types (mid-test injection)
+- **Problem (measured by probing):** any trigger type without its own handler fell to a generic "quick check" that ignored the trigger's data (a 2★ review → peer stats). The testing brief injects 15 new triggers mid-test and says bots that ignore new context score lower.
+- **Decisions (Pratham):**
+  1. **Read the trigger.** First the nearest known type, but only if that handler reads *all* of the trigger's data fields; otherwise the *trigger reader*: code turns the trigger's own fields into the why-now line and bullets under one source, the AI adds one no-numbers line on what it means for this merchant, then one concrete action (family table: reviews, slots, local/external, demand, money, stock, default).
+  2. **New type with no data → skip** (R2, same as the empty heatwave).
+  3. **Newest relevant research, with a floor:** items pushed mid-test are flagged; one wins only if it matches the merchant (≥1 match, and at least half as relevant as the best item). Otherwise the pick stays as before, and the AI may only choose among the new items that pass the floor.
+- Existing behaviour unchanged: 0 of 128 dev, held-out and fresh messages differ (rules-only diff).
+- **Blind test:** `eval/novel_set.json` = 30 triggers of unseen types, written by a separate helper that never saw the bot code (sealed). `scripts/eval_compare.py` compares round 4 with round 3.1 on it (paired).
+- **Round 4b: rate first, then choose the tone (Pratham).** Every new trigger is rated before any wording is picked: **−2** needs attention today · **−1** heads-up · **0** update · **+1** good news · **+2** great news. The rating comes from code signals: good/bad-news words in the type name; the direction of numbers × whether that metric is good or bad when it rises (calls up = good, commission up = bad); a big move (≥20%, or a rating move ≥5%) doubles it; star ratings; and the tone of any quoted text. No signal = 0. The rating picks the opener, the tone given to the AI line (−2 = calm, reassuring, action-first, no emoji; +2 = celebratory, one 🎉) and the line + action template (bad / neutral / good per family, e.g. bad review → polite reply, good review → thank-you reply). The rating and its reasons are written in each message's rationale.
+- **Round 4 result (novel set, 30 blind unseen trigger types, real judge):** 38.4 vs round 3.1 28.8 (**+9.6**); paired +10.7, wins/ties/losses 24/1/2; below-30 messages 17 → 2; decision quality 2.7 → 7.0; every category up (pharmacies 22.6 → 39.4). Existing eval sets unchanged (0/128 messages differ). **Shipped (Pratham).**
+- Empty new-type triggers: round 3.1's generic check scored 39.3 on 3 cases, but Pratham chose to **keep skipping** (restraint; nothing in the trigger to act on).
